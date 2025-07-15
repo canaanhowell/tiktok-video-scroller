@@ -262,31 +262,42 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
           
           setIsLoading(false)
           
-          // Fallback: ensure playback starts within 2 seconds
+          // Start playback after a short delay to allow quality to ramp up
           if (isActive) {
             setTimeout(() => {
               if (videoElement.paused && !hasStartedPlaybackRef.current) {
-                console.log('Timeout reached, starting playback at current quality')
+                console.log(`[Video ${index}] Starting playback after delay`)
                 hasStartedPlaybackRef.current = true
-                videoElement.play().catch(() => {})
+                videoElement.play().catch((err) => {
+                  console.error(`[Video ${index}] Delayed play failed:`, err)
+                })
               }
-            }, 2000)
+            }, 500) // Reduced to 500ms for better UX
           }
         })
         
         // Start playback once we have any fragment at the requested quality
         hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
-          if (isActive && videoElement.paused && !hasStartedPlaybackRef.current) {
+          // Check current active state from DOM
+          const videoContainer = videoElement.closest('[data-video-index]')
+          const currentIndex = videoContainer?.getAttribute('data-video-index')
+          const isCurrentlyActive = currentIndex === index.toString()
+          
+          console.log(`[Video ${index}] Fragment loaded, active: ${isCurrentlyActive}, paused: ${videoElement.paused}, hasStarted: ${hasStartedPlaybackRef.current}`)
+          
+          if (isCurrentlyActive && videoElement.paused && !hasStartedPlaybackRef.current) {
             // Check if we're loading at or near the highest quality
             const requestedLevel = hls.loadLevel
             const loadedLevel = data.frag.level
-            console.log(`Fragment loaded at level ${loadedLevel}, requested ${requestedLevel}`)
+            console.log(`[Video ${index}] Fragment at level ${loadedLevel}, requested ${requestedLevel}`)
             
             // Start playback if we're at the requested quality or if it's been too long
             if (loadedLevel >= requestedLevel || loadedLevel >= hls.levels.length - 2) {
-              console.log('Starting playback at quality level:', loadedLevel)
+              console.log(`[Video ${index}] Starting playback at quality level:`, loadedLevel)
               hasStartedPlaybackRef.current = true
-              videoElement.play().catch(() => {})
+              videoElement.play().catch((err) => {
+                console.error(`[Video ${index}] Play failed:`, err)
+              })
             }
           }
         })
@@ -337,6 +348,8 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
   useEffect(() => {
     const videoElement = videoRef.current
     if (!videoElement) return
+    
+    console.log(`[Video ${index}] Active state changed: ${isActive}`)
 
     if (isActive) {
       // Stop any other playing videos immediately
@@ -423,6 +436,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
   return (
     <div 
       className="h-viewport w-full snap-start snap-always relative"
+      data-video-index={index}
       onClick={handleInteraction}
       onTouchStart={handleInteraction}
     >
