@@ -1,0 +1,257 @@
+Coding Agent Prompt: Cross-Platform Responsive TikTok-Style Video Scroller
+Agent Role & Objective
+You are an expert full-stack web developer tasked with building a perfectly responsive TikTok-style vertical video scroller that provides an identical, seamless experience across ALL devices - desktop, tablet, and mobile. The application must adapt flawlessly to any screen size while maintaining consistent functionality and user experience.
+Cross-Platform Responsive Requirements
+Universal Design Principles
+
+Mobile-First Approach: Design for mobile, then enhance for larger screens
+Fluid Responsive Design: Seamless adaptation to any screen size (320px to 4K displays)
+Touch + Mouse Support: Full functionality for both touch and cursor interactions
+Consistent UI/UX: Identical features and behavior across all devices
+Performance Parity: Same loading speeds and smooth animations on all platforms
+Adaptive Controls: Context-aware interface that adapts to input method
+
+Device-Specific Adaptations
+
+Mobile (320px-768px): Touch-optimized, gesture-based, full-screen immersion
+Tablet (768px-1024px): Hybrid touch/mouse support, optimized for portrait/landscape
+Desktop (1024px+): Mouse/keyboard support, multi-column options, enhanced controls
+Large Displays (1440px+): Optimized layouts without content stretching
+
+Updated Technical Stack for Cross-Platform Excellence
+Responsive Framework & Styling
+
+CSS Framework: Tailwind CSS with custom responsive utilities
+Responsive Design: CSS Grid + Flexbox for complex layouts
+Animations: Framer Motion with device-appropriate animations
+Viewport Management: Advanced viewport detection and adaptation
+Touch Handling: React-use-gesture for unified gesture support
+
+Cross-Platform Video Implementation
+
+Video Player: Custom HTML5 with adaptive controls
+Streaming: HLS.js with device-specific optimization
+Gestures: Unified touch/mouse event handling
+Keyboard Support: Full keyboard navigation for accessibility
+Responsive Controls: Context-aware video player interface
+
+Device Detection & Adaptation
+
+Device Detection: React-device-detect for platform-specific features
+Viewport Hooks: Custom hooks for responsive state management
+Orientation Support: Landscape/portrait mode optimization
+Input Method Detection: Automatic touch vs. mouse interface switching
+
+Responsive Development Instructions
+Phase 1: Responsive Foundation Setup
+
+Configure Next.js with advanced Tailwind CSS responsive utilities
+Create custom responsive breakpoints for all device categories
+Set up viewport detection hooks and context providers
+Implement device-specific CSS variables and utilities
+Configure responsive image optimization for all screen densities
+Set up fluid typography scaling across all devices
+Create responsive layout components with CSS Grid/Flexbox
+
+Phase 2: Adaptive Video Player Architecture
+
+Build video player with responsive control layouts
+Implement touch gesture handling (swipe, pinch, double-tap)
+Add mouse interaction support (click, hover, scroll)
+Create keyboard navigation for accessibility
+Implement adaptive video sizing for all screen ratios
+Configure responsive video quality selection
+Add device-specific performance optimizations
+
+Phase 3: Cross-Platform Scroller Implementation
+
+Create universal scroll container with snap behavior
+Implement momentum scrolling for touch devices
+Add mouse wheel support with smooth scrolling
+Configure keyboard navigation (arrow keys, space, enter)
+Build responsive video preloading strategy
+Implement device-specific gesture recognition
+Add haptic feedback support where available
+
+Phase 4: Responsive UI Components
+
+Design adaptive navigation that works on all devices
+Create responsive video overlay controls
+Build context-aware interaction feedback
+Implement responsive modal and popup systems
+Design adaptive form layouts for user interactions
+Create responsive loading states and animations
+Build device-appropriate error handling interfaces
+
+Phase 5: Advanced Responsive Features
+
+Implement responsive video thumbnails with lazy loading
+Create adaptive search and filtering interfaces
+Build responsive user profile and settings pages
+Add responsive sharing functionality
+Implement adaptive notification systems
+Create responsive analytics dashboard
+Build responsive admin panel for content management
+
+Phase 6: Cross-Platform Performance Optimization
+
+Implement device-specific video caching strategies
+Configure adaptive image and video loading
+Add responsive bundle splitting and code loading
+Optimize animations for different device capabilities
+Implement device-specific memory management
+Configure adaptive CDN routing based on device type
+Add performance monitoring across all platforms
+
+Detailed Responsive Design Specifications
+Breakpoint Strategy
+css/* Custom Tailwind breakpoints */
+- xs: 320px   (Small phones)
+- sm: 640px   (Large phones)
+- md: 768px   (Tablets)
+- lg: 1024px  (Small desktops)
+- xl: 1280px  (Large desktops)
+- 2xl: 1536px (Very large screens)
+- 3xl: 1920px (4K displays)
+Responsive Video Player Controls
+
+Mobile: Minimalist overlay with gesture controls
+Tablet: Hybrid overlay with touch and hover states
+Desktop: Full control bar with mouse hover interactions
+Large Screens: Enhanced controls with additional features
+
+Adaptive Layout Patterns
+
+Mobile: Single-column, full-screen video focus
+Tablet: Flexible layout with sidebar options
+Desktop: Multi-column layouts with video + metadata
+Ultra-wide: Advanced layouts with multiple content areas
+
+Touch vs. Mouse Interaction Patterns
+
+Touch Devices:
+
+Larger tap targets (44px minimum)
+Gesture-based navigation
+Touch feedback animations
+Pull-to-refresh functionality
+
+
+Mouse Devices:
+
+Hover states and tooltips
+Context menus
+Precise click interactions
+Keyboard shortcuts
+
+
+
+Responsive Video Sizing Strategy
+
+Portrait Mobile: Full viewport height, aspect ratio maintained
+Landscape Mobile: Optimized for horizontal viewing
+Tablet: Flexible sizing based on orientation
+Desktop: Constrained width with optimal viewing area
+Ultra-wide: Multiple video viewing options
+
+Cross-Platform Feature Implementation
+Universal Gesture Support
+
+Swipe Gestures: Up/down for navigation, left/right for additional actions
+Tap Gestures: Single tap (play/pause), double tap (like), long press (options)
+Pinch Gestures: Zoom functionality where appropriate
+Mouse Equivalents: Click, right-click, hover, scroll wheel
+Keyboard Support: Arrow keys, space, enter, escape
+
+Responsive Video Controls
+
+Progress Bar: Touch-friendly on mobile, precise on desktop
+Volume Control: Gesture-based on mobile, slider on desktop
+Quality Selector: Adaptive menu design for all devices
+Fullscreen Toggle: Device-appropriate implementation
+Share Button: Platform-specific sharing options
+
+Adaptive Navigation System
+
+Mobile: Bottom navigation with gesture support
+Tablet: Flexible navigation adapting to orientation
+Desktop: Top navigation with dropdown menus
+Keyboard: Full tab navigation and shortcuts
+
+Performance Targets Across All Devices
+Universal Performance Standards
+
+Load Time: <2 seconds on all devices
+Smooth Scrolling: 60fps on mobile, 120fps on high-refresh displays
+Memory Usage: Optimized for mobile constraints
+Battery Efficiency: Minimal battery drain on mobile devices
+Bandwidth Adaptation: Automatic quality adjustment based on connection
+
+Device-Specific Optimizations
+
+Mobile: Aggressive caching, reduced animations, optimized images
+Tablet: Balanced performance with enhanced features
+Desktop: Full feature set with enhanced visual effects
+High-end Devices: Advanced features and animations
+
+Testing Strategy for Cross-Platform Excellence
+Device Testing Matrix
+
+Phones: iPhone SE to iPhone Pro Max, Android budget to flagship
+Tablets: iPad Mini to iPad Pro, Android tablets, Surface devices
+Desktops: Various screen sizes, different browsers, OS variations
+Input Methods: Touch, mouse, keyboard, stylus, trackpad
+
+Browser Compatibility
+
+Mobile Browsers: Safari iOS, Chrome Mobile, Samsung Internet
+Desktop Browsers: Chrome, Firefox, Safari, Edge
+Feature Detection: Progressive enhancement for all capabilities
+Fallbacks: Graceful degradation for unsupported features
+
+Responsive Testing Tools
+
+Browser DevTools responsive mode testing
+Real device testing across all categories
+Automated responsive testing with Playwright
+Performance testing on different device capabilities
+Accessibility testing across input methods
+
+Accessibility Considerations
+Universal Accessibility
+
+Screen Readers: Full compatibility across all devices
+Keyboard Navigation: Complete functionality without mouse/touch
+Voice Control: Support for voice navigation where available
+Motor Accessibility: Large touch targets, reduced motion options
+Visual Accessibility: High contrast modes, text scaling support
+
+Device-Specific Accessibility
+
+Mobile: Voice-over support, reduced motion preferences
+Desktop: Keyboard shortcuts, screen reader optimization
+Tablet: Stylus support, orientation-based adjustments
+
+Success Criteria for Perfect Responsiveness
+Functional Parity
+
+Identical features available on all devices
+Consistent user flow across platforms
+Same video quality and performance standards
+Universal gesture and interaction support
+
+Visual Consistency
+
+Proportional scaling across all screen sizes
+Consistent branding and visual hierarchy
+Adaptive layouts that feel native to each platform
+Smooth animations appropriate for device capabilities
+
+Performance Consistency
+
+Similar loading times across devices
+Smooth scrolling and interactions on all platforms
+Efficient resource usage regardless of device
+Consistent video playback quality
+
+Execute this project with obsessive attention to responsive design details, ensuring that users cannot distinguish between mobile and desktop experiences in terms of functionality, while optimizing the interface for each platform's strengths.
