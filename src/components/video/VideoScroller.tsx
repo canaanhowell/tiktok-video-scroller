@@ -276,31 +276,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
           }
         })
         
-        // Start playback once we have any fragment at the requested quality
-        hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
-          // Check current active state from DOM
-          const videoContainer = videoElement.closest('[data-video-index]')
-          const currentIndex = videoContainer?.getAttribute('data-video-index')
-          const isCurrentlyActive = currentIndex === index.toString()
-          
-          console.log(`[Video ${index}] Fragment loaded, active: ${isCurrentlyActive}, paused: ${videoElement.paused}, hasStarted: ${hasStartedPlaybackRef.current}`)
-          
-          if (isCurrentlyActive && videoElement.paused && !hasStartedPlaybackRef.current) {
-            // Check if we're loading at or near the highest quality
-            const requestedLevel = hls.loadLevel
-            const loadedLevel = data.frag.level
-            console.log(`[Video ${index}] Fragment at level ${loadedLevel}, requested ${requestedLevel}`)
-            
-            // Start playback if we're at the requested quality or if it's been too long
-            if (loadedLevel >= requestedLevel || loadedLevel >= hls.levels.length - 2) {
-              console.log(`[Video ${index}] Starting playback at quality level:`, loadedLevel)
-              hasStartedPlaybackRef.current = true
-              videoElement.play().catch((err) => {
-                console.error(`[Video ${index}] Play failed:`, err)
-              })
-            }
-          }
-        })
+        // Remove complex fragment loading logic - just rely on the timeout
         
         hls.on(Hls.Events.ERROR, (event, data) => {
           if (data.fatal) {
@@ -367,8 +343,19 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
       
       // Ensure video is loaded before playing
       const attemptPlay = () => {
-        // For HLS, playback is handled by event handlers
+        // For HLS videos, also try to play directly
         if (hlsRef.current && video.src.includes('.m3u8')) {
+          // Reset the flag and try to play
+          hasStartedPlaybackRef.current = false
+          setTimeout(() => {
+            if (videoElement.paused) {
+              console.log(`[Video ${index}] Direct play attempt from isActive effect`)
+              hasStartedPlaybackRef.current = true
+              videoElement.play().catch((err) => {
+                console.error(`[Video ${index}] Direct play failed:`, err)
+              })
+            }
+          }, 800) // Give HLS time to load
           return
         }
         
