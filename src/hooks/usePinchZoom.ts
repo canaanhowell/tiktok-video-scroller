@@ -32,7 +32,7 @@ export function usePinchZoom() {
     {
       scaleBounds: { min: 1, max: 3 },
       rubberband: true,
-      from: [zoom, 0, 0],
+      from: () => [zoom, 0] as [number, number],
     }
   )
 
