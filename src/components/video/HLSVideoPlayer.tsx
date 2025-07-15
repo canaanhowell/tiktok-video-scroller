@@ -45,7 +45,6 @@ export const HLSVideoPlayer = forwardRef<HTMLVideoElement, HLSVideoPlayerProps>(
         fragLoadingMaxRetry: 3,
         // Force highest quality
         startLevel: -1, // Auto mode, but we'll override after manifest loads
-        autoLevelCapping: -1, // No quality cap
         maxMaxBufferLength: 600, // Allow more buffering for quality
         // Prefer quality over speed
         abrEwmaDefaultEstimate: 5000000, // 5 Mbps default bandwidth estimate
