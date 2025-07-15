@@ -30,7 +30,7 @@ export const HLSVideoPlayer = forwardRef<HTMLVideoElement, HLSVideoPlayerProps>(
 
     // Check if HLS is supported
     if (Hls.isSupported()) {
-      // Create HLS instance
+      // Create HLS instance with high quality preferences
       const hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
@@ -43,6 +43,14 @@ export const HLSVideoPlayer = forwardRef<HTMLVideoElement, HLSVideoPlayerProps>(
         levelLoadingMaxRetry: 3,
         fragLoadingTimeOut: 20000,
         fragLoadingMaxRetry: 3,
+        // Force highest quality
+        startLevel: -1, // Auto mode, but we'll override after manifest loads
+        autoLevelCapping: -1, // No quality cap
+        maxMaxBufferLength: 600, // Allow more buffering for quality
+        // Prefer quality over speed
+        abrEwmaDefaultEstimate: 5000000, // 5 Mbps default bandwidth estimate
+        abrBandWidthFactor: 0.95,
+        abrBandWidthUpFactor: 0.7,
       })
 
       hlsRef.current = hls
@@ -56,6 +64,15 @@ export const HLSVideoPlayer = forwardRef<HTMLVideoElement, HLSVideoPlayerProps>(
         console.log('HLS manifest loaded, quality levels:', data.levels)
         setQualityLevels(data.levels)
         onQualityLevelsAvailable?.(data.levels)
+        
+        // Force highest quality level
+        if (data.levels.length > 0) {
+          const highestQualityIndex = data.levels.length - 1
+          console.log('Setting quality to highest level:', highestQualityIndex, data.levels[highestQualityIndex])
+          hls.startLevel = highestQualityIndex
+          hls.currentLevel = highestQualityIndex
+          hls.loadLevel = highestQualityIndex
+        }
         
         // Start playback if autoplay is enabled
         if (autoPlay) {
