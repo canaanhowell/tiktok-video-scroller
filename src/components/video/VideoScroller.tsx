@@ -244,6 +244,9 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
         hls.loadSource(video.src)
         hls.attachMedia(videoElement)
         
+        // Track playback state
+        let hasStartedPlayback = false
+        
         hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
           console.log('HLS manifest loaded for video:', video.id, 'Levels:', data.levels.length)
           
@@ -257,13 +260,33 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
           }
           
           setIsLoading(false)
+          
+          // Fallback: ensure playback starts within 2 seconds
+          if (isActive) {
+            setTimeout(() => {
+              if (videoElement.paused && !hasStartedPlayback) {
+                console.log('Timeout reached, starting playback at current quality')
+                hasStartedPlayback = true
+                videoElement.play().catch(() => {})
+              }
+            }, 2000)
+          }
         })
         
-        // Wait for high quality fragment before playing
+        // Start playback once we have any fragment at the requested quality
         hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
-          if (isActive && videoElement.paused && data.frag.level === hls.levels.length - 1) {
-            console.log('High quality fragment loaded, starting playback')
-            videoElement.play().catch(() => {})
+          if (isActive && videoElement.paused && !hasStartedPlayback) {
+            // Check if we're loading at or near the highest quality
+            const requestedLevel = hls.loadLevel
+            const loadedLevel = data.frag.level
+            console.log(`Fragment loaded at level ${loadedLevel}, requested ${requestedLevel}`)
+            
+            // Start playback if we're at the requested quality or if it's been too long
+            if (loadedLevel >= requestedLevel || loadedLevel >= hls.levels.length - 2) {
+              console.log('Starting playback at quality level:', loadedLevel)
+              hasStartedPlayback = true
+              videoElement.play().catch(() => {})
+            }
           }
         })
         
@@ -330,10 +353,8 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
       
       // Ensure video is loaded before playing
       const attemptPlay = () => {
-        // For HLS, wait for high quality fragment to be loaded
+        // For HLS, playback is handled by event handlers
         if (hlsRef.current && video.src.includes('.m3u8')) {
-          // HLS playback is handled by FRAG_LOADED event
-          console.log('Waiting for HLS high quality fragment...')
           return
         }
         
