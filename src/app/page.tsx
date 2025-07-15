@@ -4,36 +4,48 @@ import { useState, useEffect } from 'react'
 import { VideoScroller } from '@/components/video/VideoScroller'
 import { Typography } from '@/components/ui/Typography'
 
-// Demo videos as fallback
-const demoVideos = [
+// Your actual Bunny CDN videos
+const bunnyVideos = [
   {
-    id: '1',
-    src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    username: 'demo_user1',
-    description: 'Beautiful nature scenery 🌲 #nature #relaxing',
+    id: '724695ee-95f8-4a97-8558-ec4d384613e3',
+    src: 'https://vz-97606b97-31d.b-cdn.net/724695ee-95f8-4a97-8558-ec4d384613e3/playlist.m3u8',
+    username: 'user_1',
+    description: 'Video 1 from input folder 🎥',
     likes: 1234,
     comments: 56,
     shares: 12,
   },
   {
-    id: '2',
-    src: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
-    username: 'demo_user2',
-    description: 'Check out this amazing animation! 🎬 #animation #film',
+    id: '73057fa4-bc39-492c-a69f-814503efa047',
+    src: 'https://vz-97606b97-31d.b-cdn.net/73057fa4-bc39-492c-a69f-814503efa047/playlist.m3u8',
+    username: 'user_2',
+    description: 'Video 2 from input folder 🎬',
     likes: 5678,
     comments: 234,
     shares: 89,
   },
   {
-    id: '3',
-    src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    username: 'demo_user3',
-    description: 'Living my best life 😎 #lifestyle #vibes',
+    id: '0c186e2d-1c2b-44bc-a37b-f1b40db2ef35',
+    src: 'https://vz-97606b97-31d.b-cdn.net/0c186e2d-1c2b-44bc-a37b-f1b40db2ef35/playlist.m3u8',
+    username: 'user_4',
+    description: 'Video 4 from input folder 📹',
     likes: 9012,
     comments: 345,
     shares: 123,
   },
+  {
+    id: '72118581-c1e7-4e79-8e10-f47c95531b05',
+    src: 'https://vz-97606b97-31d.b-cdn.net/72118581-c1e7-4e79-8e10-f47c95531b05/playlist.m3u8',
+    username: 'user_5',
+    description: 'Video 5 from input folder 🎞️',
+    likes: 3456,
+    comments: 123,
+    shares: 45,
+  },
 ]
+
+// Demo videos as fallback
+const demoVideos = bunnyVideos
 
 export default function Home() {
   const [currentVideo, setCurrentVideo] = useState(0)
@@ -41,7 +53,9 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchVideos()
+    // Temporarily disabled API fetch - using hardcoded Bunny videos
+    // fetchVideos()
+    setLoading(false)
   }, [])
 
   const fetchVideos = async () => {
