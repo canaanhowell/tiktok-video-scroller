@@ -67,7 +67,7 @@ export class BunnyVideoUploader {
         thumbnailUrl: bunnyConfig.getThumbnailUrl(videoId),
         processingStatus: videoDetails.status
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading video:', error)
       throw new Error(`Failed to upload video: ${error.message}`)
     }
@@ -134,7 +134,7 @@ export class BunnyVideoUploader {
         thumbnailUrl: bunnyConfig.getThumbnailUrl(videoId),
         processingStatus: response.data.status
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading video from URL:', error)
       throw new Error(`Failed to upload video from URL: ${error.message}`)
     }
