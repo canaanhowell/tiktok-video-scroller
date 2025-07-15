@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { VideoScroller } from '@/components/video/VideoScroller'
 import { Typography } from '@/components/ui/Typography'
 
-// Demo videos - replace with your actual video data from Supabase
+// Demo videos as fallback
 const demoVideos = [
   {
     id: '1',
@@ -33,39 +33,60 @@ const demoVideos = [
     comments: 345,
     shares: 123,
   },
-  {
-    id: '4',
-    src: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
-    username: 'demo_user4',
-    description: 'Art in motion 🎨 #creative #inspiration',
-    likes: 3456,
-    comments: 123,
-    shares: 45,
-  },
-  {
-    id: '5',
-    src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    username: 'demo_user5',
-    description: 'Never stop exploring 🌍 #travel #adventure',
-    likes: 7890,
-    comments: 456,
-    shares: 234,
-  },
 ]
 
 export default function Home() {
   const [currentVideo, setCurrentVideo] = useState(0)
+  const [videos, setVideos] = useState(demoVideos)
+  const [loading, setLoading] = useState(true)
 
-  const handleVideoChange = (index: number, video: typeof demoVideos[0]) => {
+  useEffect(() => {
+    fetchVideos()
+  }, [])
+
+  const fetchVideos = async () => {
+    try {
+      const response = await fetch('/api/videos/list?limit=20')
+      
+      if (response.ok) {
+        const data = await response.json()
+        // Filter only ready videos (status 4 means fully processed)
+        const readyVideos = data.videos.filter((video: any) => video.status === 4)
+        
+        if (readyVideos.length > 0) {
+          setVideos(readyVideos)
+        } else {
+          console.log('No videos from Bunny CDN yet, using demo videos')
+        }
+      } else {
+        console.error('Failed to fetch videos, using demo videos')
+      }
+    } catch (err) {
+      console.error('Error fetching videos:', err)
+      // Keep using demo videos on error
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleVideoChange = (index: number, video: typeof videos[0]) => {
     setCurrentVideo(index)
     console.log('Now viewing:', video.username, '-', video.description)
+  }
+
+  if (loading) {
+    return (
+      <div className="h-viewport w-full bg-black flex items-center justify-center">
+        <div className="text-white">Loading videos...</div>
+      </div>
+    )
   }
 
   return (
     <div className="h-viewport w-full bg-black relative">
       {/* Video Scroller */}
       <VideoScroller
-        videos={demoVideos}
+        videos={videos}
         onVideoChange={handleVideoChange}
       />
       
@@ -73,7 +94,8 @@ export default function Home() {
       <div className="absolute top-4 left-4 z-30 pointer-events-none">
         <div className="bg-black/50 backdrop-blur rounded-lg px-3 py-2">
           <Typography variant="caption" className="text-white/80">
-            Video {currentVideo + 1} of {demoVideos.length}
+            Video {currentVideo + 1} of {videos.length}
+            {videos === demoVideos && ' (Demo)'}
           </Typography>
         </div>
       </div>
