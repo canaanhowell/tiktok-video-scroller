@@ -53,9 +53,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Temporarily disabled API fetch - using hardcoded Bunny videos
-    // fetchVideos()
-    setLoading(false)
+    fetchVideos()
   }, [])
 
   const fetchVideos = async () => {
