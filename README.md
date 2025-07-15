@@ -16,11 +16,14 @@ A cross-platform responsive vertical video scroller that provides a seamless Tik
 
 - **Framework**: Next.js 14 with TypeScript
 - **Styling**: Tailwind CSS with custom responsive utilities
-- **Video**: HTML5 with HLS.js for streaming
+- **Database**: Supabase (PostgreSQL + Auth + Realtime)
+- **Video CDN**: Bunny CDN (Storage + HLS Streaming)
+- **Caching**: Upstash Redis (Serverless)
+- **Video Player**: HLS.js for adaptive streaming
 - **Gestures**: react-use-gesture
 - **State**: React Context + Hooks
 - **Testing**: Jest + Playwright
-- **Deployment**: Vercel/AWS
+- **Deployment**: Vercel with custom domain
 
 ## Project Structure
 
@@ -67,6 +70,10 @@ cp .env.example .env.local
 # Run development server
 npm run dev
 ```
+
+### Production URL
+
+The app is deployed at: **https://media.synthetikmedia.ai**
 
 ### Development
 

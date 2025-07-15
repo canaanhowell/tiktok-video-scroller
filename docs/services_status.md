@@ -8,7 +8,8 @@
    - Built-in authentication
    - Real-time subscriptions
    - Row Level Security
-   - **Status**: Token available ✅
+   - **Status**: Fully configured ✅
+   - **URL**: https://aanszwtmjvfskdettlxm.supabase.co
 
 2. **Bunny CDN** (Video Infrastructure)
    - Storage zone: trueharmonic

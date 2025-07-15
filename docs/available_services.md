@@ -6,26 +6,49 @@ Based on your .env file, here are the services we have available:
 
 ### 1. GitHub Repository
 - **URL**: https://github.com/canaanhowell/tiktok-video-scroller
-- **Status**: Repository created and initialized
-- **Next Step**: Push code with `git push -u origin main`
+- **Status**: Repository active with initial structure pushed
+- **CLI**: GitHub CLI authenticated as `canaanhowell`
 
 ### 2. Supabase (Database)
-- **Token**: Available
+- **Project URL**: https://aanszwtmjvfskdettlxm.supabase.co
+- **Status**: Fully configured with all keys
 - **Use Case**: 
-  - User authentication
+  - User authentication (social + email)
   - Video metadata storage
   - User interactions (likes, comments)
+  - Real-time updates
   - Analytics data
 
 ### 3. Bunny CDN (Video Storage & Streaming)
 - **Storage Zone**: trueharmonic
 - **Streaming Library**: 467029
 - **Hostname**: vz-97606b97-31d.b-cdn.net
+- **Status**: All API keys configured
 - **Use Case**:
   - Video file storage
   - HLS streaming
   - Global CDN delivery
+  - Automatic transcoding
   - Bandwidth optimization
+
+### 4. Upstash Redis (Caching)
+- **Endpoint**: wealthy-moose-10185.upstash.io
+- **Status**: REST API configured
+- **Use Case**:
+  - View count caching
+  - Rate limiting
+  - Session management
+  - Performance optimization
+
+### 5. Vercel (Deployment)
+- **Project ID**: prj_n2wkROJ6OcyYdtZI2uF0Ra4MLJHk
+- **Domain**: https://media.synthetikmedia.ai
+- **Status**: CLI authenticated as `canaanhowell-2070`
+- **Use Case**:
+  - Production hosting
+  - Edge functions
+  - Automatic SSL
+  - Preview deployments
 
 ## 🎯 Recommended Architecture
 
