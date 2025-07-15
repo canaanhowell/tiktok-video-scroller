@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { useSwipeable } from 'react-swipeable'
+import Hls from 'hls.js'
 import { cn } from '@/lib/utils'
 import { EnhancedVideoPlayer } from './EnhancedVideoPlayer'
 import { useDevice } from '@/contexts/DeviceContext'
@@ -204,11 +205,79 @@ interface VideoItemProps {
 
 function VideoItem({ video, index, isActive }: VideoItemProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const hlsRef = useRef<Hls | null>(null)
   const [isMuted, setIsMuted] = useState(true)
   const [showMuteIcon, setShowMuteIcon] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const { hasUserInteracted, setHasUserInteracted } = useInteraction()
+
+  // Initialize HLS for .m3u8 streams
+  useEffect(() => {
+    const videoElement = videoRef.current
+    if (!videoElement || !video.src) return
+
+    const isHLS = video.src.includes('.m3u8')
+    
+    if (isHLS) {
+      if (Hls.isSupported()) {
+        // Use HLS.js for browsers that don't natively support HLS
+        const hls = new Hls({
+          enableWorker: true,
+          lowLatencyMode: false,
+          backBufferLength: 90,
+        })
+        
+        hlsRef.current = hls
+        hls.loadSource(video.src)
+        hls.attachMedia(videoElement)
+        
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          console.log('HLS manifest loaded for video:', video.id)
+          setIsLoading(false)
+        })
+        
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          if (data.fatal) {
+            console.error('Fatal HLS error:', data)
+            setHasError(true)
+            setIsLoading(false)
+            
+            switch (data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                console.error('Network error')
+                hls.startLoad()
+                break
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                console.error('Media error')
+                hls.recoverMediaError()
+                break
+              default:
+                hls.destroy()
+                break
+            }
+          }
+        })
+        
+        return () => {
+          hls.destroy()
+          hlsRef.current = null
+        }
+      } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+        // Native HLS support (Safari)
+        videoElement.src = video.src
+        setIsLoading(false)
+      } else {
+        console.error('HLS is not supported in this browser')
+        setHasError(true)
+        setIsLoading(false)
+      }
+    } else {
+      // Regular video file
+      videoElement.src = video.src
+      setIsLoading(false)
+    }
+  }, [video.src, video.id])
 
   // Auto-play/pause based on visibility
   useEffect(() => {
@@ -247,7 +316,10 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
         } else {
           // Wait for video to be ready
           videoElement.addEventListener('loadeddata', attemptPlay, { once: true })
-          videoElement.load() // Force reload if needed
+          // Don't force reload for HLS streams, let HLS.js handle it
+          if (!video.src.includes('.m3u8')) {
+            videoElement.load()
+          }
         }
       }
       
@@ -259,7 +331,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
         videoElement.currentTime = 0
       }
     }
-  }, [isActive, hasUserInteracted])
+  }, [isActive, hasUserInteracted, video.src])
 
   // Handle tap/click to unmute
   const handleInteraction = () => {
@@ -278,6 +350,16 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
     }
   }
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy()
+        hlsRef.current = null
+      }
+    }
+  }, [])
+
   return (
     <div 
       className="h-viewport w-full snap-start snap-always relative"
@@ -286,7 +368,6 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
     >
       <video
         ref={videoRef}
-        src={video.src}
         poster={video.poster}
         autoPlay={false} // We control this manually
         muted={isMuted}
@@ -297,17 +378,29 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
         className="h-full w-full object-cover"
         onLoadStart={() => {
           console.log('Video load started:', video.id)
-          setIsLoading(true)
-          setHasError(false)
+          // Don't set loading for HLS streams, HLS.js will handle it
+          if (!video.src.includes('.m3u8')) {
+            setIsLoading(true)
+            setHasError(false)
+          }
         }}
         onLoadedData={() => {
           console.log('Video loaded:', video.id)
-          setIsLoading(false)
+          // Don't set loading for HLS streams, HLS.js will handle it
+          if (!video.src.includes('.m3u8')) {
+            setIsLoading(false)
+          }
         }}
         onError={(e) => {
-          console.error('Video error:', video.id, e)
-          setHasError(true)
-          setIsLoading(false)
+          const videoElement = e.currentTarget as HTMLVideoElement
+          const error = videoElement.error
+          console.error('Video error:', video.id, 'Code:', error?.code, 'Message:', error?.message)
+          
+          // Only set error for non-HLS streams, HLS.js handles its own errors
+          if (!video.src.includes('.m3u8')) {
+            setHasError(true)
+            setIsLoading(false)
+          }
         }}
       />
       
