@@ -50,16 +50,23 @@ export default function Home() {
       
       if (response.ok) {
         const data = await response.json()
+        console.log('Fetched videos from Bunny CDN:', data.videos.length)
+        
         // Filter only ready videos (status 4 means fully processed)
-        const readyVideos = data.videos.filter((video: any) => video.status === 4)
+        const readyVideos = data.videos.filter((video: any) => {
+          // Status 4 = finished processing, Status 3 = encoding
+          return video.status === 4 || video.status === 3
+        })
         
         if (readyVideos.length > 0) {
+          console.log('Using Bunny CDN videos:', readyVideos)
           setVideos(readyVideos)
         } else {
-          console.log('No videos from Bunny CDN yet, using demo videos')
+          console.log('No ready videos from Bunny CDN yet, using demo videos')
         }
       } else {
-        console.error('Failed to fetch videos, using demo videos')
+        const errorData = await response.json()
+        console.error('Failed to fetch videos:', errorData)
       }
     } catch (err) {
       console.error('Error fetching videos:', err)

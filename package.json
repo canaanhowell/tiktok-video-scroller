@@ -52,6 +52,7 @@
     "@types/video.js": "^7.3.58",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",
+    "dotenv": "^17.2.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.1.0",
