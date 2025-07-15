@@ -75,7 +75,7 @@ export function VideoUploader({ onUploadComplete, onCancel }: VideoUploaderProps
       setTimeout(() => {
         resetUploader()
       }, 2000)
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || 'Failed to upload video')
       setUploading(false)
     }
