@@ -11,7 +11,7 @@ Build a cross-platform responsive TikTok-style vertical video scroller with perf
 - [x] Initialize Next.js project with TypeScript
 - [x] Configure Tailwind CSS with custom breakpoints
 - [x] Set up ESLint and Prettier
-- [x] Configure environment variables
+- [ ] Configure environment variables
 - [ ] Create base layout components
 - [x] Set up Git repository
 
