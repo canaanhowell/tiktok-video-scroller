@@ -1,32 +1,85 @@
+'use client'
+
+import { useState } from 'react'
+import { VideoScroller } from '@/components/video/VideoScroller'
+import { Typography } from '@/components/ui/Typography'
+
+// Demo videos - replace with your actual video data from Supabase
+const demoVideos = [
+  {
+    id: '1',
+    src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    username: 'demo_user1',
+    description: 'Beautiful nature scenery 🌲 #nature #relaxing',
+    likes: 1234,
+    comments: 56,
+    shares: 12,
+  },
+  {
+    id: '2',
+    src: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+    username: 'demo_user2',
+    description: 'Check out this amazing animation! 🎬 #animation #film',
+    likes: 5678,
+    comments: 234,
+    shares: 89,
+  },
+  {
+    id: '3',
+    src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    username: 'demo_user3',
+    description: 'Living my best life 😎 #lifestyle #vibes',
+    likes: 9012,
+    comments: 345,
+    shares: 123,
+  },
+  {
+    id: '4',
+    src: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+    username: 'demo_user4',
+    description: 'Art in motion 🎨 #creative #inspiration',
+    likes: 3456,
+    comments: 123,
+    shares: 45,
+  },
+  {
+    id: '5',
+    src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    username: 'demo_user5',
+    description: 'Never stop exploring 🌍 #travel #adventure',
+    likes: 7890,
+    comments: 456,
+    shares: 234,
+  },
+]
+
 export default function Home() {
+  const [currentVideo, setCurrentVideo] = useState(0)
+
+  const handleVideoChange = (index: number, video: typeof demoVideos[0]) => {
+    setCurrentVideo(index)
+    console.log('Now viewing:', video.username, '-', video.description)
+  }
+
   return (
-    <div className="h-screen w-full relative">
-      {/* Video Scroller Container */}
-      <div className="h-full w-full flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">TikTok Video Scroller</h1>
-          <p className="text-gray-400 mb-8">🚀 Ready to build the video experience!</p>
-          
-          {/* Responsive info */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto px-4">
-            <div className="bg-gray-900 p-4 rounded-lg">
-              <h3 className="font-semibold mb-2">📱 Mobile First</h3>
-              <p className="text-sm text-gray-400">Optimized for touch gestures</p>
-            </div>
-            <div className="bg-gray-900 p-4 rounded-lg">
-              <h3 className="font-semibold mb-2">🎥 HLS Streaming</h3>
-              <p className="text-sm text-gray-400">Powered by Bunny CDN</p>
-            </div>
-            <div className="bg-gray-900 p-4 rounded-lg">
-              <h3 className="font-semibold mb-2">⚡ Real-time</h3>
-              <p className="text-sm text-gray-400">Supabase + Redis caching</p>
-            </div>
-          </div>
+    <div className="h-viewport w-full bg-black relative">
+      {/* Video Scroller */}
+      <VideoScroller
+        videos={demoVideos}
+        onVideoChange={handleVideoChange}
+      />
+      
+      {/* Development overlay */}
+      <div className="absolute top-4 left-4 z-30 pointer-events-none">
+        <div className="bg-black/50 backdrop-blur rounded-lg px-3 py-2">
+          <Typography variant="caption" className="text-white/80">
+            Video {currentVideo + 1} of {demoVideos.length}
+          </Typography>
         </div>
       </div>
       
       {/* Mobile bottom padding for nav */}
-      <div className="h-16 md:hidden" />
+      <div className="h-16 md:hidden pointer-events-none" />
     </div>
   )
 }

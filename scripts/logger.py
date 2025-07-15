@@ -153,4 +153,10 @@ def initialize_logs():
 initialize_logs()
 
 if __name__ == "__main__":
-    log_action("Logger module test successful")
+    # Log the message passed as command line argument
+    import sys
+    if len(sys.argv) > 1:
+        message = ' '.join(sys.argv[1:])
+        log_action(message)
+    else:
+        log_action("Logger module test successful")

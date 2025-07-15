@@ -1,14 +1,22 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
+import '@/styles/globals.css'
 import { MainLayout } from '@/components/layout/MainLayout'
+import { DeviceProvider } from '@/contexts/DeviceContext'
+import { InteractionProvider } from '@/contexts/InteractionContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'TikTok Video Scroller | Media',
   description: 'Cross-platform responsive vertical video scroller',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 export default function RootLayout({
@@ -19,9 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.className} overflow-x-hidden`}>
-        <MainLayout>
-          {children}
-        </MainLayout>
+        <DeviceProvider>
+          <InteractionProvider>
+            <MainLayout>
+              {children}
+            </MainLayout>
+          </InteractionProvider>
+        </DeviceProvider>
       </body>
     </html>
   )

@@ -3,7 +3,7 @@
 import { Home, Compass, Users, MessageCircle, User, Settings } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 
 const navItems = [
   { icon: Home, href: '/', label: 'For You' },
