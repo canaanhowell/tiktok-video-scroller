@@ -30,26 +30,33 @@ export const HLSVideoPlayer = forwardRef<HTMLVideoElement, HLSVideoPlayerProps>(
 
     // Check if HLS is supported
     if (Hls.isSupported()) {
-      // Create HLS instance with high quality preferences
+      // Create HLS instance with aggressive quality preferences
       const hls = new Hls({
         enableWorker: true,
-        lowLatencyMode: true,
+        lowLatencyMode: false, // Disable low latency to prioritize quality
         backBufferLength: 90,
         maxBufferSize: 60 * 1000 * 1000, // 60MB
-        maxBufferLength: 30, // 30 seconds
+        maxBufferLength: 60, // Increase to 60 seconds
         manifestLoadingTimeOut: 15000,
         manifestLoadingMaxRetry: 3,
         levelLoadingTimeOut: 15000,
         levelLoadingMaxRetry: 3,
         fragLoadingTimeOut: 20000,
         fragLoadingMaxRetry: 3,
-        // Force highest quality
-        startLevel: -1, // Auto mode, but we'll override after manifest loads
-        maxMaxBufferLength: 600, // Allow more buffering for quality
-        // Prefer quality over speed
-        abrEwmaDefaultEstimate: 5000000, // 5 Mbps default bandwidth estimate
+        // Force highest quality from start
+        startLevel: 9999, // Force highest level (will cap to actual highest)
+        capLevelToPlayerSize: false, // Don't limit quality based on player size
+        maxMaxBufferLength: 600,
+        // Aggressive bandwidth estimation
+        abrEwmaDefaultEstimate: 10000000, // 10 Mbps default
+        abrEwmaFastLive: 5000000, // 5 Mbps for fast switching
+        abrEwmaSlowLive: 8000000, // 8 Mbps for slow switching
         abrBandWidthFactor: 0.95,
         abrBandWidthUpFactor: 0.7,
+        // Faster quality switching
+        abrMaxWithRealBitrate: true,
+        testBandwidth: false, // Don't test, assume good bandwidth
+        startFragPrefetch: true, // Prefetch fragments
       })
 
       hlsRef.current = hls
@@ -64,17 +71,21 @@ export const HLSVideoPlayer = forwardRef<HTMLVideoElement, HLSVideoPlayerProps>(
         setQualityLevels(data.levels)
         onQualityLevelsAvailable?.(data.levels)
         
-        // Force highest quality level
+        // Force highest quality level immediately
         if (data.levels.length > 0) {
           const highestQualityIndex = data.levels.length - 1
           console.log('Setting quality to highest level:', highestQualityIndex, data.levels[highestQualityIndex])
-          hls.startLevel = highestQualityIndex
+          hls.nextLevel = highestQualityIndex
           hls.currentLevel = highestQualityIndex
           hls.loadLevel = highestQualityIndex
+          hls.autoLevelEnabled = false // Disable auto quality switching
         }
-        
-        // Start playback if autoplay is enabled
-        if (autoPlay) {
+      })
+
+      // Wait for first fragment to load at high quality before playing
+      hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
+        if (autoPlay && video.paused && data.frag.level === hls.levels.length - 1) {
+          console.log('High quality fragment loaded, starting playback')
           video.play().catch(err => {
             console.error('Autoplay failed:', err)
           })
