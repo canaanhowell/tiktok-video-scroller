@@ -129,7 +129,7 @@ export const HLSVideoPlayer = forwardRef<HTMLVideoElement, HLSVideoPlayerProps>(
       setError('HLS is not supported in this browser')
       console.error('HLS is not supported')
     }
-  }, [src, autoPlay, onQualityChange, onQualityLevelsAvailable])
+  }, [src, autoPlay, onQualityChange, onQualityLevelsAvailable, ref])
 
   // Method to change quality
   const changeQuality = (levelIndex: number) => {
