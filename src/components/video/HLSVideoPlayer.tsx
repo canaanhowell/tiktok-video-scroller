@@ -78,7 +78,6 @@ export const HLSVideoPlayer = forwardRef<HTMLVideoElement, HLSVideoPlayerProps>(
           hls.nextLevel = highestQualityIndex
           hls.currentLevel = highestQualityIndex
           hls.loadLevel = highestQualityIndex
-          hls.autoLevelEnabled = false // Disable auto quality switching
         }
       })
 

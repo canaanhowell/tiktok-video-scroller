@@ -254,7 +254,6 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
             hls.nextLevel = highestLevel
             hls.currentLevel = highestLevel
             hls.loadLevel = highestLevel
-            hls.autoLevelEnabled = false
           }
           
           setIsLoading(false)
