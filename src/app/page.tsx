@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { VideoScroller } from '@/components/video/VideoScroller'
+import { VideoScroller } from '@/components/video/VideoScrollerSimple'
 import { Typography } from '@/components/ui/Typography'
 
 // Your actual Bunny CDN videos - Updated July 16, 2025

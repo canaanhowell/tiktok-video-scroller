@@ -1,6 +1,6 @@
 'use client'
 
-import { VideoScroller } from '@/components/video/VideoScroller'
+import { VideoScroller } from '@/components/video/VideoScrollerSimple'
 
 export default function DemoPage() {
   // Your actual uploaded videos from Bunny CDN

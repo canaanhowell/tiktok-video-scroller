@@ -4,7 +4,7 @@ import '@/styles/globals.css'
 import { MainLayout } from '@/components/layout/MainLayout'
 import { DeviceProvider } from '@/contexts/DeviceContext'
 import { InteractionProvider } from '@/contexts/InteractionContext'
-import { VideoManagerProvider } from '@/contexts/VideoManagerContext'
+// import { VideoManagerProvider } from '@/contexts/VideoManagerContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -30,11 +30,9 @@ export default function RootLayout({
       <body className={`${inter.className} overflow-x-hidden`}>
         <DeviceProvider>
           <InteractionProvider>
-            <VideoManagerProvider>
-              <MainLayout>
-                {children}
-              </MainLayout>
-            </VideoManagerProvider>
+            <MainLayout>
+              {children}
+            </MainLayout>
           </InteractionProvider>
         </DeviceProvider>
       </body>
