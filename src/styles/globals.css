@@ -110,6 +110,14 @@
     background: #000;
   }
   
+  /* Mobile auto-crop: remove max-width constraint */
+  @media (max-width: 768px) {
+    .video-aspect-wrapper {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+  
   /* Border styling for video container */
   .video-border-container {
     position: relative;
@@ -121,6 +129,20 @@
     /* Ensure video renders properly */
     transform: translateZ(0);
     will-change: transform;
+  }
+  
+  /* Mobile: remove borders for full-width experience */
+  @media (max-width: 768px) {
+    .video-border-container {
+      border-left: none;
+      border-right: none;
+    }
+    
+    /* Also remove gradient overlays on mobile */
+    .video-border-container::before,
+    .video-border-container::after {
+      display: none;
+    }
   }
   
   /* Add subtle gradient to borders */

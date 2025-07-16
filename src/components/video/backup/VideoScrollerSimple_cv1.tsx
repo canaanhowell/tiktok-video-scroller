@@ -4,7 +4,6 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import Hls from 'hls.js'
 import { cn } from '@/lib/utils'
 import { useInteraction } from '@/contexts/InteractionContext'
-import { useDevice } from '@/contexts/DeviceContext'
 
 interface Video {
   id: string
@@ -85,7 +84,6 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
   const [showMuteIcon, setShowMuteIcon] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const { hasUserInteracted, setHasUserInteracted } = useInteraction()
-  const { isMobile } = useDevice()
 
   // Initialize video source
   useEffect(() => {
@@ -198,10 +196,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
             loop
             playsInline
             preload="auto"
-            className={cn(
-              "h-full w-full",
-              isMobile ? "object-cover" : "object-contain"
-            )}
+            className="h-full w-full object-contain"
           />
         </div>
       </div>
@@ -231,7 +226,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
       {/* Video info */}
       <div className="absolute bottom-20 left-4 right-20 z-20 pointer-events-none">
         <div className="text-white">
-          <p className="font-semibold mb-1">@{video.username} [v3-crop]</p>
+          <p className="font-semibold mb-1">@{video.username} [v2]</p>
           <p className="text-sm opacity-90">{video.description}</p>
         </div>
       </div>
