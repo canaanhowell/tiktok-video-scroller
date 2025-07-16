@@ -311,33 +311,42 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
     if (!videoElement) return
     
     console.log(`[Video ${index}] Active state changed: ${isActive}`)
+    
+    let timer: NodeJS.Timeout | null = null
+    let eventHandler: (() => void) | null = null
 
     if (isActive) {
       // Use centralized manager to play video
       const muted = !hasUserInteracted
       setIsMuted(muted)
       
-      // Wait a bit for HLS to be ready, then play
-      const timer = setTimeout(() => {
+      // Wait longer for HLS to be ready and previous videos to fully stop
+      timer = setTimeout(() => {
         if (isActive && videoElement.readyState >= 2) {
           playVideo(videoElement, muted, video.id)
         } else if (isActive) {
           // Wait for video to be ready
-          const handleCanPlay = () => {
+          eventHandler = () => {
             if (isActive) {
               playVideo(videoElement, muted, video.id)
             }
           }
-          videoElement.addEventListener('canplay', handleCanPlay, { once: true })
+          videoElement.addEventListener('canplay', eventHandler, { once: true })
         }
-      }, 100)
-      
-      return () => clearTimeout(timer)
+      }, 300) // Increased delay to match debounce
     } else {
       // Use centralized manager to pause video
       pauseVideo(videoElement)
     }
-  }, [isActive, hasUserInteracted, video.id, playVideo, pauseVideo])
+    
+    // Cleanup function
+    return () => {
+      if (timer) clearTimeout(timer)
+      if (eventHandler) {
+        videoElement.removeEventListener('canplay', eventHandler)
+      }
+    }
+  }, [isActive, hasUserInteracted, video.id, playVideo, pauseVideo, index])
 
   // Handle tap/click to toggle mute state
   const handleInteraction = () => {

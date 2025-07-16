@@ -14,6 +14,7 @@ export function VideoManagerProvider({ children }: { children: React.ReactNode }
   const currentVideoRef = useRef<HTMLVideoElement | null>(null)
   const currentVideoIdRef = useRef<string | null>(null)
   const playingPromiseRef = useRef<Promise<void> | null>(null)
+  const lastOperationTimeRef = useRef<number>(0)
 
   const pauseVideo = useCallback((video: HTMLVideoElement) => {
     if (video === currentVideoRef.current) {
@@ -27,6 +28,15 @@ export function VideoManagerProvider({ children }: { children: React.ReactNode }
 
   const playVideo = useCallback(async (video: HTMLVideoElement, muted: boolean, videoId: string) => {
     console.log(`[VideoManager] Request to play video: ${videoId}`)
+    
+    // Debounce rapid play requests
+    const now = Date.now()
+    const timeSinceLastOperation = now - lastOperationTimeRef.current
+    if (timeSinceLastOperation < 300) {
+      console.log(`[VideoManager] Debouncing play request for ${videoId} (only ${timeSinceLastOperation}ms since last operation)`)
+      return
+    }
+    lastOperationTimeRef.current = now
     
     // If this is already the current video, do nothing
     if (currentVideoIdRef.current === videoId && currentVideoRef.current === video) {
