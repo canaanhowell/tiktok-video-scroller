@@ -4,43 +4,52 @@ import { useState, useEffect } from 'react'
 import { VideoScroller } from '@/components/video/VideoScroller'
 import { Typography } from '@/components/ui/Typography'
 
-// Your actual Bunny CDN videos
+// Your actual Bunny CDN videos - Updated July 16, 2025
 const bunnyVideos = [
   {
-    id: '724695ee-95f8-4a97-8558-ec4d384613e3',
-    src: 'https://vz-97606b97-31d.b-cdn.net/724695ee-95f8-4a97-8558-ec4d384613e3/playlist.m3u8',
-    username: 'user_1',
-    description: 'Video 1 from input folder 🎥',
+    id: 'b5a4dfe3-2bc7-4fa3-a6dd-3ec36aceff8f',
+    src: 'https://vz-97606b97-31d.b-cdn.net/b5a4dfe3-2bc7-4fa3-a6dd-3ec36aceff8f/playlist.m3u8',
+    username: 'synthetikmedia',
+    description: 'Romance Wedding Video 1 💕',
     likes: 1234,
     comments: 56,
     shares: 12,
   },
   {
-    id: '73057fa4-bc39-492c-a69f-814503efa047',
-    src: 'https://vz-97606b97-31d.b-cdn.net/73057fa4-bc39-492c-a69f-814503efa047/playlist.m3u8',
-    username: 'user_2',
-    description: 'Video 2 from input folder 🎬',
+    id: '755f7bdc-2026-4037-b15d-469397e29010',
+    src: 'https://vz-97606b97-31d.b-cdn.net/755f7bdc-2026-4037-b15d-469397e29010/playlist.m3u8',
+    username: 'synthetikmedia',
+    description: 'Romantic Moments 💍',
     likes: 5678,
     comments: 234,
     shares: 89,
   },
   {
-    id: '0c186e2d-1c2b-44bc-a37b-f1b40db2ef35',
-    src: 'https://vz-97606b97-31d.b-cdn.net/0c186e2d-1c2b-44bc-a37b-f1b40db2ef35/playlist.m3u8',
-    username: 'user_4',
-    description: 'Video 4 from input folder 📹',
+    id: '533f6ad4-cf07-4846-b232-c7f79dce11a5',
+    src: 'https://vz-97606b97-31d.b-cdn.net/533f6ad4-cf07-4846-b232-c7f79dce11a5/playlist.m3u8',
+    username: 'synthetikmedia',
+    description: 'Wedding Celebration 🎊',
     likes: 9012,
     comments: 345,
     shares: 123,
   },
   {
-    id: '72118581-c1e7-4e79-8e10-f47c95531b05',
-    src: 'https://vz-97606b97-31d.b-cdn.net/72118581-c1e7-4e79-8e10-f47c95531b05/playlist.m3u8',
-    username: 'user_5',
-    description: 'Video 5 from input folder 🎞️',
+    id: 'ab57b1fe-df73-4bcc-8f57-b7869519b62d',
+    src: 'https://vz-97606b97-31d.b-cdn.net/ab57b1fe-df73-4bcc-8f57-b7869519b62d/playlist.m3u8',
+    username: 'synthetikmedia',
+    description: 'Love Story 💖',
     likes: 3456,
     comments: 123,
     shares: 45,
+  },
+  {
+    id: '67254311-41da-4200-a59c-429995a0755f',
+    src: 'https://vz-97606b97-31d.b-cdn.net/67254311-41da-4200-a59c-429995a0755f/playlist.m3u8',
+    username: 'synthetikmedia',
+    description: 'Forever Together 👰🤵',
+    likes: 7890,
+    comments: 456,
+    shares: 234,
   },
 ]
 

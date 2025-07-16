@@ -76,6 +76,75 @@
     height: 100dvh;
   }
   
+  /* Responsive video container with max-height for desktop */
+  .video-container {
+    height: 100vh;
+    height: 100dvh;
+    width: 100%;
+    max-height: 100vh;
+  }
+  
+  /* On larger screens (desktop), limit video height for multi-video view */
+  @media (min-width: 768px) {
+    .video-container {
+      max-height: 800px; /* Roughly the height of largest phones */
+      height: 90vh; /* Allow some space for UI elements */
+    }
+  }
+  
+  /* For very large screens, further limit height */
+  @media (min-width: 1024px) {
+    .video-container {
+      max-height: 750px;
+      height: 85vh;
+    }
+  }
+  
+  /* Video aspect ratio container */
+  .video-aspect-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    max-width: calc(100vh * 9 / 16); /* 9:16 aspect ratio */
+    margin: 0 auto;
+    background: #000;
+  }
+  
+  /* Border styling for video container */
+  .video-border-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+    /* Ensure video renders properly */
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  /* Add subtle gradient to borders */
+  .video-border-container::before,
+  .video-border-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .video-border-container::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+  }
+  
+  .video-border-container::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.3), transparent);
+  }
+  
   /* Smooth scrolling with momentum on iOS */
   .smooth-scroll {
     -webkit-overflow-scrolling: touch;

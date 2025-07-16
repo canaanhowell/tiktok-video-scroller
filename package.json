@@ -9,7 +9,12 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "deploy": "node scripts/deploy-vercel.js",
+    "deploy:bash": "bash deploy.sh",
+    "test:services": "node scripts/test-all-services.js",
+    "upload:videos": "node scripts/upload-input-videos.js",
+    "test:api": "node scripts/test-production-api.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

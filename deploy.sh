@@ -3,13 +3,18 @@
 echo "🚀 Starting Vercel deployment..."
 echo ""
 
-# Export token
-export VERCEL_TOKEN="${vercel_token}"
+# Load environment variables from .env.local
+if [ -f .env.local ]; then
+    export $(grep -E '^Vercel_token=' .env.local | xargs)
+fi
+
+# Use the correct token variable name (Vercel_token with lowercase 't')
+VERCEL_TOKEN="${Vercel_token}"
 
 # Check if token exists
 if [ -z "$VERCEL_TOKEN" ]; then
-    echo "❌ Error: Vercel token not found in environment"
-    echo "Please ensure vercel_token is set"
+    echo "❌ Error: Vercel token not found"
+    echo "Please ensure 'Vercel_token' is set in .env.local"
     exit 1
 fi
 
