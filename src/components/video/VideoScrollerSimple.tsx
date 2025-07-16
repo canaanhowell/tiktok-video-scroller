@@ -5,6 +5,7 @@ import Hls from 'hls.js'
 import { cn } from '@/lib/utils'
 import { useInteraction } from '@/contexts/InteractionContext'
 import { useDevice } from '@/contexts/DeviceContext'
+import { ThumbsUp, ThumbsDown } from 'lucide-react'
 
 interface Video {
   id: string
@@ -56,10 +57,13 @@ export function VideoScroller({ videos, className, onVideoChange }: VideoScrolle
       className={cn(
         'h-full w-full overflow-y-auto overflow-x-hidden',
         'snap-y snap-mandatory scroll-smooth',
-        'scrollbar-hide',
+        'scrollbar-hide bg-black',
         className
       )}
     >
+      {/* Desktop only: Add padding for centering */}
+      <div className="hidden md:block pointer-events-none" style={{ height: '50vh', scrollSnapAlign: 'none' }} />
+      
       {videos.map((video, index) => (
         <VideoItem
           key={video.id}
@@ -68,6 +72,9 @@ export function VideoScroller({ videos, className, onVideoChange }: VideoScrolle
           isActive={index === currentIndex}
         />
       ))}
+      
+      {/* Desktop only: Add padding at the end */}
+      <div className="hidden md:block pointer-events-none" style={{ height: '50vh', scrollSnapAlign: 'none' }} />
     </div>
   )
 }
@@ -84,6 +91,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
   const [isMuted, setIsMuted] = useState(true)
   const [showMuteIcon, setShowMuteIcon] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [videoAspectRatio, setVideoAspectRatio] = useState<number | null>(null)
   const { hasUserInteracted, setHasUserInteracted } = useInteraction()
   const { isMobile } = useDevice()
 
@@ -187,23 +195,36 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
 
   return (
     <div 
-      className="video-container snap-start snap-always relative flex items-center justify-center bg-black"
+      className="video-container snap-center snap-always relative flex items-center justify-center bg-black overflow-hidden"
+      style={{ backgroundColor: '#000' }}
       onClick={handleInteraction}
     >
-      <div className="video-aspect-wrapper">
-        <div className="video-border-container">
-          <video
-            ref={videoRef}
-            muted={isMuted}
-            loop
-            playsInline
-            preload="auto"
-            className={cn(
-              "h-full w-full",
-              isMobile ? "object-cover" : "object-contain"
-            )}
-          />
-        </div>
+      {/* Full black background layers */}
+      <div className="absolute inset-0 bg-black" style={{ backgroundColor: '#000000' }} />
+      <div className="absolute inset-0 bg-black z-[1]" />
+      
+      {/* Video wrapper that fills entire container */}
+      <div className={cn(
+        "absolute inset-0 z-[2]",
+        !isMobile && "flex items-center justify-center"
+      )}>
+        <video
+          ref={videoRef}
+          muted={isMuted}
+          loop
+          playsInline
+          preload="auto"
+          className={cn(
+            "h-full w-full",
+            isMobile ? "object-cover" : "object-contain"
+          )}
+          style={{ backgroundColor: '#000000' }}
+          onLoadedMetadata={(e) => {
+            const video = e.target as HTMLVideoElement;
+            const ratio = video.videoWidth / video.videoHeight;
+            setVideoAspectRatio(ratio);
+          }}
+        />
       </div>
 
       {/* Mute indicator */}
@@ -221,6 +242,21 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
         </div>
       )}
 
+      {/* Desktop Only: Thumbs up/down icons */}
+      {!isMobile && (
+        <div 
+          className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-3 z-[10]"
+          style={{ left: 'calc(50% + min(50vw, 50vh * 9 / 16) + 10px)' }}
+        >
+          <button className="w-12 h-12 bg-white/10 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/20 transition group">
+            <ThumbsUp className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+          </button>
+          <button className="w-12 h-12 bg-white/10 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/20 transition group">
+            <ThumbsDown className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+          </button>
+        </div>
+      )}
+
       {/* Loading indicator */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50">
@@ -228,35 +264,6 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
         </div>
       )}
 
-      {/* Video info */}
-      <div className="absolute bottom-20 left-4 right-20 z-20 pointer-events-none">
-        <div className="text-white">
-          <p className="font-semibold mb-1">@{video.username} [v4-full]</p>
-          <p className="text-sm opacity-90">{video.description}</p>
-        </div>
-      </div>
-
-      {/* Interaction buttons */}
-      <div className="absolute right-4 bottom-20 z-20 flex flex-col gap-4">
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-12 h-12 bg-white/10 backdrop-blur rounded-full flex items-center justify-center text-2xl">
-            ❤️
-          </div>
-          <span className="text-white text-xs font-medium">{video.likes}</span>
-        </button>
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-12 h-12 bg-white/10 backdrop-blur rounded-full flex items-center justify-center text-2xl">
-            💬
-          </div>
-          <span className="text-white text-xs font-medium">{video.comments}</span>
-        </button>
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-12 h-12 bg-white/10 backdrop-blur rounded-full flex items-center justify-center text-2xl">
-            ↗️
-          </div>
-          <span className="text-white text-xs font-medium">{video.shares}</span>
-        </button>
-      </div>
     </div>
   )
 }

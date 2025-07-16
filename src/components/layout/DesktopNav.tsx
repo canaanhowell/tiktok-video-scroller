@@ -18,11 +18,9 @@ export function DesktopNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="hidden md:block fixed left-0 top-0 h-full w-64 bg-black border-r border-gray-800 z-50">
+    <nav className="hidden md:block fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-black border-r border-gray-800 z-40">
       <div className="p-4">
-        <Link href="/" className="text-2xl font-bold text-white">
-          VideoScroller
-        </Link>
+        {/* Logo moved to TopNav */}
       </div>
       
       <div className="mt-8">

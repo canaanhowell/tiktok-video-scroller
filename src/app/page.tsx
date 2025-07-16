@@ -111,7 +111,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-[calc(100vh-64px)] md:h-viewport w-full bg-black relative">
+    <div className="h-[calc(100vh-64px)] md:h-viewport w-full md:w-full w-screen bg-black relative">
       {/* Video Scroller */}
       <VideoScroller
         videos={videos}

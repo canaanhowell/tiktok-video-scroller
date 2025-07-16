@@ -3,6 +3,7 @@
 import { ReactNode } from 'react'
 import { MobileNav } from './MobileNav'
 import { DesktopNav } from './DesktopNav'
+import { TopNav } from './TopNav'
 
 interface MainLayoutProps {
   children: ReactNode
@@ -11,7 +12,10 @@ interface MainLayoutProps {
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Desktop Navigation */}
+      {/* Top Navigation for Desktop */}
+      <TopNav />
+      
+      {/* Desktop Side Navigation */}
       <DesktopNav />
       
       {/* Main Content */}

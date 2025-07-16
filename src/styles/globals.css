@@ -17,7 +17,7 @@
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    background-color: var(--bg-primary, #000);
+    background-color: #000;
     color: var(--text-primary, #fff);
   }
 
@@ -82,21 +82,37 @@
     height: 100dvh;
     width: 100%;
     max-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background-color: #000000 !important;
+    background: #000000 !important;
+    isolation: isolate;
   }
   
-  /* Mobile: Account for bottom navigation (64px) */
+  /* Mobile: Account for bottom navigation (64px) and ensure exact sizing */
   @media (max-width: 767px) {
     .video-container {
       height: calc(100vh - 64px);
       height: calc(100dvh - 64px);
+      min-height: calc(100vh - 64px);
+      min-height: calc(100dvh - 64px);
+      max-height: calc(100vh - 64px);
+      max-height: calc(100dvh - 64px);
+      flex-shrink: 0;
+      background-color: #000;
+      width: 100vw;
+      max-width: 100vw;
+      margin: 0;
+      padding: 0;
     }
   }
   
-  /* On larger screens (desktop), limit video height for multi-video view */
+  /* On larger screens (desktop), ensure full viewport height */
   @media (min-width: 768px) {
     .video-container {
-      max-height: 800px; /* Roughly the height of largest phones */
-      height: 90vh; /* Allow some space for UI elements */
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100vh;
     }
   }
   
@@ -108,77 +124,34 @@
     }
   }
   
-  /* Video aspect ratio container */
-  .video-aspect-wrapper {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    max-width: calc(100vh * 9 / 16); /* 9:16 aspect ratio */
-    margin: 0 auto;
-    background: #000;
-  }
+  /* Video aspect ratio container - removed, using direct positioning instead */
   
-  /* Mobile auto-crop: remove max-width constraint */
-  @media (max-width: 768px) {
-    .video-aspect-wrapper {
-      max-width: 100%;
-      width: 100%;
-    }
-  }
-  
-  /* Border styling for video container */
-  .video-border-container {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-    background: #000;
-    /* Ensure video renders properly */
-    transform: translateZ(0);
-    will-change: transform;
-  }
-  
-  /* Mobile: remove borders for full-width experience */
-  @media (max-width: 768px) {
-    .video-border-container {
-      border-left: none;
-      border-right: none;
-    }
-    
-    /* Also remove gradient overlays on mobile */
-    .video-border-container::before,
-    .video-border-container::after {
-      display: none;
-    }
-  }
-  
-  /* Add subtle gradient to borders */
-  .video-border-container::before,
-  .video-border-container::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 20px;
-    pointer-events: none;
-    z-index: 1;
-  }
-  
-  .video-border-container::before {
-    left: 0;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
-  }
-  
-  .video-border-container::after {
-    right: 0;
-    background: linear-gradient(to left, rgba(0, 0, 0, 0.3), transparent);
-  }
+  /* Border styling removed - using direct video positioning */
   
   /* Smooth scrolling with momentum on iOS */
   .smooth-scroll {
     -webkit-overflow-scrolling: touch;
     overflow-y: auto;
+  }
+  
+  /* Desktop: Add scroll padding for proper centering */
+  @media (min-width: 768px) {
+    .snap-y {
+      scroll-snap-type: y mandatory;
+    }
+    
+    /* Center snap alignment for desktop */
+    .snap-center {
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+    }
+  }
+  
+  /* Mobile: Start snap alignment */
+  @media (max-width: 767px) {
+    .snap-center {
+      scroll-snap-align: start;
+    }
   }
 
   /* Hide scrollbar but keep functionality */
