@@ -207,6 +207,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const hlsRef = useRef<Hls | null>(null)
   const hasStartedPlaybackRef = useRef(false)
+  const playPromiseRef = useRef<Promise<void> | null>(null)
   const [isMuted, setIsMuted] = useState(true)
   const [showMuteIcon, setShowMuteIcon] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -328,34 +329,60 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
       videoElement.muted = !hasUserInteracted
       setIsMuted(!hasUserInteracted)
       
-      // Ensure video is loaded before playing
-      const attemptPlay = () => {
+      // Small delay to ensure previous videos have stopped
+      setTimeout(() => {
+        if (!isActive) return // Check if still active after delay
+        
+        // Ensure video is loaded before playing
+        const attemptPlay = () => {
         if (videoElement.readyState >= 2) { // HAVE_CURRENT_DATA
-          const playPromise = videoElement.play()
-          if (playPromise !== undefined) {
-            playPromise.catch(err => {
-              console.log('Autoplay prevented:', err)
-              // Try playing muted if unmuted autoplay fails
-              if (!videoElement.muted) {
-                videoElement.muted = true
-                setIsMuted(true)
-                videoElement.play().catch(e => console.log('Muted autoplay also failed:', e))
-              }
-            })
+          playPromiseRef.current = videoElement.play()
+          if (playPromiseRef.current !== undefined) {
+            playPromiseRef.current
+              .then(() => {
+                // Play started successfully
+                playPromiseRef.current = null
+              })
+              .catch(err => {
+                console.log('Autoplay prevented:', err)
+                playPromiseRef.current = null
+                // Try playing muted if unmuted autoplay fails
+                if (!videoElement.muted) {
+                  videoElement.muted = true
+                  setIsMuted(true)
+                  videoElement.play().catch(e => console.log('Muted autoplay also failed:', e))
+                }
+              })
           }
         } else {
           // Wait for video to be ready
           videoElement.addEventListener('loadeddata', attemptPlay, { once: true })
         }
       }
-      
-      attemptPlay()
+        
+        attemptPlay()
+      }, 100) // 100ms delay
     } else {
       // Pause and reset video when it's not active
       if (videoElement) {
-        videoElement.pause()
-        videoElement.currentTime = 0
-        hasStartedPlaybackRef.current = false
+        // Wait for any pending play promise to resolve before pausing
+        if (playPromiseRef.current) {
+          playPromiseRef.current
+            .then(() => {
+              videoElement.pause()
+              videoElement.currentTime = 0
+              hasStartedPlaybackRef.current = false
+            })
+            .catch(() => {
+              // Play was already interrupted, safe to reset
+              videoElement.currentTime = 0
+              hasStartedPlaybackRef.current = false
+            })
+        } else {
+          videoElement.pause()
+          videoElement.currentTime = 0
+          hasStartedPlaybackRef.current = false
+        }
       }
     }
   }, [isActive, hasUserInteracted, video.src])
@@ -392,6 +419,8 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
         hlsRef.current.destroy()
         hlsRef.current = null
       }
+      // Cancel any pending play promises
+      playPromiseRef.current = null
     }
   }, [])
 
