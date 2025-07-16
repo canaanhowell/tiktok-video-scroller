@@ -226,7 +226,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
       {/* Video info */}
       <div className="absolute bottom-20 left-4 right-20 z-20 pointer-events-none">
         <div className="text-white">
-          <p className="font-semibold mb-1">@{video.username}</p>
+          <p className="font-semibold mb-1">@{video.username} [v2]</p>
           <p className="text-sm opacity-90">{video.description}</p>
         </div>
       </div>
