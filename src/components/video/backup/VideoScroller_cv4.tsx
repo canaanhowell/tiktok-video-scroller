@@ -221,65 +221,28 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
     
     if (isHLS) {
       if (Hls.isSupported()) {
-        // Use HLS.js with aggressive quality settings
+        // Use HLS.js with simple settings
         const hls = new Hls({
           enableWorker: true,
-          lowLatencyMode: false,
-          backBufferLength: 90,
-          maxBufferSize: 60 * 1000 * 1000, // 60MB
-          maxBufferLength: 60, // 60 seconds
-          // Force highest quality from start
-          startLevel: 9999, // Force highest level
-          capLevelToPlayerSize: false,
-          // Aggressive bandwidth estimation
-          abrEwmaDefaultEstimate: 10000000, // 10 Mbps
-          abrBandWidthFactor: 0.95,
-          abrBandWidthUpFactor: 0.7,
-          abrMaxWithRealBitrate: true,
-          testBandwidth: false,
-          startFragPrefetch: true,
+          maxBufferLength: 30,
+          maxMaxBufferLength: 60,
+          maxBufferSize: 60 * 1000 * 1000,
         })
         
         hlsRef.current = hls
         hls.loadSource(video.src)
         hls.attachMedia(videoElement)
         
-        hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
-          console.log('HLS manifest loaded for video:', video.id, 'Levels:', data.levels.length)
-          
-          // Force highest quality immediately
-          if (data.levels.length > 0) {
-            const highestLevel = data.levels.length - 1
-            console.log('Forcing highest quality level:', highestLevel, data.levels[highestLevel])
-            hls.nextLevel = highestLevel
-            hls.currentLevel = highestLevel
-            hls.loadLevel = highestLevel
-          }
-          
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          console.log('HLS manifest loaded for video:', video.id)
           setIsLoading(false)
         })
-        
-        // Remove complex fragment loading logic - just rely on the timeout
         
         hls.on(Hls.Events.ERROR, (event, data) => {
           if (data.fatal) {
             console.error('Fatal HLS error:', data)
             setHasError(true)
             setIsLoading(false)
-            
-            switch (data.type) {
-              case Hls.ErrorTypes.NETWORK_ERROR:
-                console.error('Network error')
-                hls.startLoad()
-                break
-              case Hls.ErrorTypes.MEDIA_ERROR:
-                console.error('Media error')
-                hls.recoverMediaError()
-                break
-              default:
-                hls.destroy()
-                break
-            }
           }
         })
         
@@ -303,59 +266,45 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
     }
   }, [video.src, video.id])
 
-  // Auto-play/pause based on visibility
+  // Simple play/pause based on visibility
   useEffect(() => {
     const videoElement = videoRef.current
     if (!videoElement) return
-    
-    console.log(`[Video ${index}] Active state changed: ${isActive}`)
 
     if (isActive) {
       // Set mute state
       videoElement.muted = !hasUserInteracted
       setIsMuted(!hasUserInteracted)
       
-      // Simple async play
+      // Play video
       const playVideo = async () => {
         try {
           await videoElement.play()
-          console.log(`[Video ${index}] Playing successfully`)
-        } catch (err: any) {
-          console.log(`[Video ${index}] Play failed:`, err.message)
+        } catch (err) {
+          console.log('Play failed:', err)
           // If unmuted play fails, try muted
           if (!videoElement.muted) {
             videoElement.muted = true
             setIsMuted(true)
             try {
               await videoElement.play()
-              console.log(`[Video ${index}] Muted play succeeded`)
-            } catch (e: any) {
-              console.log(`[Video ${index}] Muted play also failed:`, e.message)
+            } catch (e) {
+              console.log('Muted play also failed:', e)
             }
           }
         }
       }
       
-      // Small delay to let previous videos pause
-      const timer = setTimeout(() => {
-        if (isActive && videoElement.readyState >= 2) {
-          playVideo()
-        } else if (isActive) {
-          // Wait for video to be ready
-          const handleCanPlay = () => {
-            if (isActive) playVideo()
-          }
-          videoElement.addEventListener('canplay', handleCanPlay, { once: true })
-        }
-      }, 150)
+      // Give a small delay to ensure video is ready
+      const timer = setTimeout(playVideo, 50)
       
       return () => clearTimeout(timer)
     } else {
-      // Simply pause the video
+      // Pause video
       videoElement.pause()
       videoElement.currentTime = 0
     }
-  }, [isActive, hasUserInteracted, index])
+  }, [isActive, hasUserInteracted])
 
   // Handle tap/click to toggle mute state
   const handleInteraction = () => {
@@ -382,16 +331,6 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
     }
   }
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (hlsRef.current) {
-        hlsRef.current.destroy()
-        hlsRef.current = null
-      }
-    }
-  }, [])
-
   return (
     <div 
       className="video-container snap-start snap-always relative flex items-center justify-center bg-black"
@@ -403,7 +342,6 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
       <div className="video-aspect-wrapper">
         <div className="video-border-container">
           <video
-            key={`video-${video.id}-${index}`}
             ref={videoRef}
             poster={video.poster}
             autoPlay={false} // We control this manually
@@ -413,32 +351,29 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
             preload="auto"
             crossOrigin="anonymous"
             className="h-full w-full object-contain"
-        onLoadStart={() => {
-          console.log('Video load started:', video.id)
-          // Don't set loading for HLS streams, HLS.js will handle it
-          if (!video.src.includes('.m3u8')) {
-            setIsLoading(true)
-            setHasError(false)
-          }
-        }}
-        onLoadedData={() => {
-          console.log('Video loaded:', video.id)
-          // Don't set loading for HLS streams, HLS.js will handle it
-          if (!video.src.includes('.m3u8')) {
-            setIsLoading(false)
-          }
-        }}
-        onError={(e) => {
-          const videoElement = e.currentTarget as HTMLVideoElement
-          const error = videoElement.error
-          console.error('Video error:', video.id, 'Code:', error?.code, 'Message:', error?.message)
-          
-          // Only set error for non-HLS streams, HLS.js handles its own errors
-          if (!video.src.includes('.m3u8')) {
-            setHasError(true)
-            setIsLoading(false)
-          }
-        }}
+            onLoadStart={() => {
+              console.log('Video load started:', video.id)
+              if (!video.src.includes('.m3u8')) {
+                setIsLoading(true)
+                setHasError(false)
+              }
+            }}
+            onLoadedData={() => {
+              console.log('Video loaded:', video.id)
+              if (!video.src.includes('.m3u8')) {
+                setIsLoading(false)
+              }
+            }}
+            onError={(e) => {
+              const videoElement = e.currentTarget as HTMLVideoElement
+              const error = videoElement.error
+              console.error('Video error:', video.id, 'Code:', error?.code, 'Message:', error?.message)
+              
+              if (!video.src.includes('.m3u8')) {
+                setHasError(true)
+                setIsLoading(false)
+              }
+            }}
           />
         </div>
       </div>
