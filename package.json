@@ -12,6 +12,8 @@
     "format:check": "prettier --check .",
     "deploy": "node scripts/deploy-vercel.js",
     "deploy:bash": "bash deploy.sh",
+    "deploy:prod": "vercel --prod --token ooa3rKLHeWAVOftf6EIS9sD3 --yes",
+    "deploy:working": "./scripts/deploy-production.sh",
     "test:services": "node scripts/test-all-services.js",
     "upload:videos": "node scripts/upload-input-videos.js",
     "test:api": "node scripts/test-production-api.js"

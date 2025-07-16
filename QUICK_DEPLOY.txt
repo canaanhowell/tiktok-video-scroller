@@ -1,0 +1,13 @@
+QUICK DEPLOYMENT REFERENCE
+==========================
+
+✅ WORKING COMMAND (Copy & Paste):
+vercel --prod --token ooa3rKLHeWAVOftf6EIS9sD3 --yes
+
+OR use npm script:
+npm run deploy:prod
+
+THAT'S IT! No other setup needed.
+
+Deployment takes ~1-2 minutes.
+Check https://media.synthetikmedia.ai when done.
