@@ -44,7 +44,7 @@ export default function DemoPage() {
   ]
 
   return (
-    <div className="h-viewport w-full bg-black relative">
+    <div className="h-[calc(100vh-64px)] md:h-viewport w-full bg-black relative">
       <VideoScroller videos={bunnyVideos} />
       
       {/* Info overlay */}

@@ -84,6 +84,14 @@
     max-height: 100vh;
   }
   
+  /* Mobile: Account for bottom navigation (64px) */
+  @media (max-width: 767px) {
+    .video-container {
+      height: calc(100vh - 64px);
+      height: calc(100dvh - 64px);
+    }
+  }
+  
   /* On larger screens (desktop), limit video height for multi-video view */
   @media (min-width: 768px) {
     .video-container {

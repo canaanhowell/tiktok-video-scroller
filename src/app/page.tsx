@@ -111,7 +111,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-viewport w-full bg-black relative">
+    <div className="h-[calc(100vh-64px)] md:h-viewport w-full bg-black relative">
       {/* Video Scroller */}
       <VideoScroller
         videos={videos}
@@ -127,9 +127,6 @@ export default function Home() {
           </Typography>
         </div>
       </div>
-      
-      {/* Mobile bottom padding for nav */}
-      <div className="h-16 md:hidden pointer-events-none" />
     </div>
   )
 }

@@ -54,7 +54,7 @@ export function VideoScroller({ videos, className, onVideoChange }: VideoScrolle
     <div
       ref={scrollerRef}
       className={cn(
-        'h-viewport w-full overflow-y-auto overflow-x-hidden',
+        'h-full w-full overflow-y-auto overflow-x-hidden',
         'snap-y snap-mandatory scroll-smooth',
         'scrollbar-hide',
         className
@@ -231,7 +231,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
       {/* Video info */}
       <div className="absolute bottom-20 left-4 right-20 z-20 pointer-events-none">
         <div className="text-white">
-          <p className="font-semibold mb-1">@{video.username} [v3-crop]</p>
+          <p className="font-semibold mb-1">@{video.username} [v4-full]</p>
           <p className="text-sm opacity-90">{video.description}</p>
         </div>
       </div>
