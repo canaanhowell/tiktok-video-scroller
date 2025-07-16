@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { EnhancedVideoPlayer } from './EnhancedVideoPlayer'
 import { useDevice } from '@/contexts/DeviceContext'
 import { useInteraction } from '@/contexts/InteractionContext'
+import { useVideoManager } from '@/contexts/VideoManagerContext'
 import { VideoPreloader, useVideoPreloader } from './VideoPreloader'
 
 interface Video {
@@ -211,6 +212,7 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const { hasUserInteracted, setHasUserInteracted } = useInteraction()
+  const { playVideo, pauseVideo } = useVideoManager()
 
   // Initialize HLS for .m3u8 streams
   useEffect(() => {
@@ -303,94 +305,39 @@ function VideoItem({ video, index, isActive }: VideoItemProps) {
     }
   }, [video.src, video.id])
 
-  // Track if this component is mounted
-  const isMountedRef = useRef(true)
-  
-  useEffect(() => {
-    return () => {
-      isMountedRef.current = false
-    }
-  }, [])
-
-  // Auto-play/pause based on visibility
+  // Auto-play/pause based on visibility using centralized manager
   useEffect(() => {
     const videoElement = videoRef.current
     if (!videoElement) return
     
     console.log(`[Video ${index}] Active state changed: ${isActive}`)
 
-    let timeoutId: NodeJS.Timeout | null = null
-
     if (isActive) {
-      // First pause ALL videos to ensure clean state
-      document.querySelectorAll('video').forEach(v => {
-        if (v !== videoElement) {
-          v.pause()
-          v.currentTime = 0
-        }
-      })
-
-      // Set mute state
-      videoElement.muted = !hasUserInteracted
-      setIsMuted(!hasUserInteracted)
+      // Use centralized manager to play video
+      const muted = !hasUserInteracted
+      setIsMuted(muted)
       
-      // Simple async play
-      const playVideo = async () => {
-        // Double check we're still active and mounted
-        if (!isActive || !isMountedRef.current) return
-        
-        try {
-          await videoElement.play()
-          console.log(`[Video ${index}] Playing successfully`)
-        } catch (err: any) {
-          // Only log if we're still supposed to be playing
-          if (isActive && isMountedRef.current) {
-            console.log(`[Video ${index}] Play failed:`, err.message)
-            // If unmuted play fails, try muted
-            if (!videoElement.muted && err.name === 'NotAllowedError') {
-              videoElement.muted = true
-              setIsMuted(true)
-              try {
-                await videoElement.play()
-                console.log(`[Video ${index}] Muted play succeeded`)
-              } catch (e: any) {
-                console.log(`[Video ${index}] Muted play also failed:`, e.message)
-              }
-            }
-          }
-        }
-      }
-      
-      // Delay to let previous videos fully stop
-      timeoutId = setTimeout(() => {
-        if (!isActive || !isMountedRef.current) return
-        
-        if (videoElement.readyState >= 2) {
-          playVideo()
-        } else {
+      // Wait a bit for HLS to be ready, then play
+      const timer = setTimeout(() => {
+        if (isActive && videoElement.readyState >= 2) {
+          playVideo(videoElement, muted, video.id)
+        } else if (isActive) {
           // Wait for video to be ready
           const handleCanPlay = () => {
-            if (isActive && isMountedRef.current) playVideo()
+            if (isActive) {
+              playVideo(videoElement, muted, video.id)
+            }
           }
           videoElement.addEventListener('canplay', handleCanPlay, { once: true })
         }
-      }, 200) // Increased delay
+      }, 100)
       
+      return () => clearTimeout(timer)
     } else {
-      // Immediately pause the video
-      videoElement.pause()
-      videoElement.currentTime = 0
+      // Use centralized manager to pause video
+      pauseVideo(videoElement)
     }
-
-    // Cleanup
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId)
-      // Ensure video is paused on cleanup
-      if (!isActive && videoElement) {
-        videoElement.pause()
-      }
-    }
-  }, [isActive, hasUserInteracted, index])
+  }, [isActive, hasUserInteracted, video.id, playVideo, pauseVideo])
 
   // Handle tap/click to toggle mute state
   const handleInteraction = () => {
