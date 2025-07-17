@@ -22,7 +22,7 @@ def backup_files():
     # Files to backup
     important_files = [
         ".env",
-        ".env.local.example",
+        ".env.example",
         ".gitignore",
         "README.md",
         "vercel.json",
@@ -86,7 +86,7 @@ def restore_files(backup_dir):
     # Files to restore
     restore_items = [
         ".env",
-        ".env.local.example",
+        ".env.example",
         "vercel.json",
         "Web_App_Instructions",
         "docs",

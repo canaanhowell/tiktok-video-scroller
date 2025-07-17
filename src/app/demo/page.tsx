@@ -1,6 +1,6 @@
 'use client'
 
-import { VideoScroller } from '@/components/video/VideoScrollerSimple'
+import { VideoScrollerFresh } from '@/components/video/VideoScrollerFresh'
 
 export default function DemoPage() {
   // Your actual uploaded videos from Bunny CDN
@@ -45,7 +45,7 @@ export default function DemoPage() {
 
   return (
     <div className="h-[calc(100vh-64px)] md:h-viewport w-full bg-black relative">
-      <VideoScroller videos={bunnyVideos} />
+      <VideoScrollerFresh videos={bunnyVideos} />
       
       {/* Info overlay */}
       <div className="absolute top-4 left-4 z-30 pointer-events-none">

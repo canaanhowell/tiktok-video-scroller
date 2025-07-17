@@ -1,0 +1,12 @@
+# Python dependencies for Web App project
+# Generated from analysis of all Python scripts in the codebase
+
+# Google Cloud & Firebase
+google-cloud-storage>=2.10.0
+firebase-admin>=6.1.0
+
+# Database (may be deprecated as project transitions to Firebase)
+supabase>=2.0.0
+
+# HTTP requests
+requests>=2.31.0

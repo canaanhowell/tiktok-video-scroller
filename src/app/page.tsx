@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { VideoScroller } from '@/components/video/VideoScrollerSimple'
+import { VideoScrollerFresh } from '@/components/video/VideoScrollerFresh'
 import { Typography } from '@/components/ui/Typography'
+import { videoService } from '@/services/videos'
 
 // Your actual Bunny CDN videos - Updated July 16, 2025
 const bunnyVideos = [
@@ -67,31 +68,21 @@ export default function Home() {
 
   const fetchVideos = async () => {
     try {
-      const response = await fetch('/api/videos/list?limit=20')
+      // Use video service layer instead of direct API calls
+      console.log('Fetching videos via service layer...')
+      const fetchedVideos = await videoService.getVideoFeed('current-user', { limit: 20 })
       
-      if (response.ok) {
-        const data = await response.json()
-        console.log('Fetched videos from Bunny CDN:', data.videos.length)
-        
-        // Filter only ready videos (status 4 means fully processed)
-        const readyVideos = data.videos.filter((video: any) => {
-          // Status 4 = finished processing, Status 3 = encoding
-          return video.status === 4 || video.status === 3
-        })
-        
-        if (readyVideos.length > 0) {
-          console.log('Using Bunny CDN videos:', readyVideos)
-          setVideos(readyVideos)
-        } else {
-          console.log('No ready videos from Bunny CDN yet, using demo videos')
-        }
+      if (fetchedVideos && fetchedVideos.length > 0) {
+        console.log('Using videos from service layer:', fetchedVideos.length)
+        setVideos(fetchedVideos)
       } else {
-        const errorData = await response.json()
-        console.error('Failed to fetch videos:', errorData)
+        console.log('No videos from service layer, using demo videos')
+        // Keep using demo videos as fallback
       }
     } catch (err) {
-      console.error('Error fetching videos:', err)
-      // Keep using demo videos on error
+      console.log('Service layer not implemented yet, using demo videos')
+      console.log('Error:', err instanceof Error ? err.message : 'Unknown error')
+      // Keep using demo videos when service is not implemented
     } finally {
       setLoading(false)
     }
@@ -100,6 +91,29 @@ export default function Home() {
   const handleVideoChange = (index: number, video: typeof videos[0]) => {
     setCurrentVideo(index)
     console.log('Now viewing:', video.username, '-', video.description)
+    
+    // Simple preload optimization - preload next video
+    if (index + 1 < videos.length) {
+      const nextVideo = videos[index + 1]
+      if (nextVideo.src.includes('.m3u8')) {
+        // For HLS videos, create a prefetch link
+        const existingLink = document.querySelector(`link[href="${nextVideo.src}"]`)
+        if (!existingLink) {
+          const link = document.createElement('link')
+          link.rel = 'prefetch'
+          link.href = nextVideo.src
+          link.as = 'fetch'
+          document.head.appendChild(link)
+          
+          // Remove after 30 seconds to prevent memory buildup
+          setTimeout(() => {
+            if (link.parentNode) {
+              link.parentNode.removeChild(link)
+            }
+          }, 30000)
+        }
+      }
+    }
   }
 
   if (loading) {
@@ -111,9 +125,9 @@ export default function Home() {
   }
 
   return (
-    <div className="h-[calc(100vh-64px)] md:h-viewport w-full md:w-full w-screen bg-black relative">
+    <div className="h-screen w-full bg-black relative">
       {/* Video Scroller */}
-      <VideoScroller
+      <VideoScrollerFresh
         videos={videos}
         onVideoChange={handleVideoChange}
       />

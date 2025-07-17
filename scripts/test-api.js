@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const axios = require('axios');
-require('dotenv').config({ path: '.env.local' });
+require('dotenv').config({ path: '.env' });
 
 async function testBunnyAPI() {
   console.log('🔍 Testing Bunny CDN API directly...\n');

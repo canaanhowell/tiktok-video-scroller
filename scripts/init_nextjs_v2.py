@@ -301,12 +301,12 @@ body {
     public_dir = base_dir / "public"
     public_dir.mkdir(exist_ok=True)
     
-    # Create .env.local from .env
+    # Create .env from .env
     env_file = base_dir / ".env"
-    env_local = base_dir / ".env.local"
+    env_local = base_dir / ".env"
     if env_file.exists():
         shutil.copy2(env_file, env_local)
-        log_file_operation("create", ".env.local", True)
+        log_file_operation("create", ".env", True)
     
     log_action("Next.js project structure created successfully")
     return True

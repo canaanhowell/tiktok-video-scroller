@@ -48,7 +48,7 @@ export function VideoScrollerFresh({ videos, className, onVideoChange }: VideoSc
   return (
     <div
       ref={scrollerRef}
-      className={`h-full w-full overflow-y-auto snap-y snap-mandatory bg-black ${className || ''}`}
+      className={`h-full w-full overflow-y-scroll snap-y snap-mandatory bg-black ${className || ''}`}
       style={{ 
         scrollbarWidth: 'none', 
         msOverflowStyle: 'none',
