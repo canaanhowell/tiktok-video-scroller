@@ -73,7 +73,7 @@ export class VideoService {
     // TODO: Implement via backend API
     console.log('VideoService.getVideoFeed - To be implemented by backend')
     
-    // Temporary mock data for development
+    // Temporary mock data for development - using actual Bunny CDN videos
     return [
       {
         id: 'b5a4dfe3-2bc7-4fa3-a6dd-3ec36aceff8f',
@@ -88,6 +88,66 @@ export class VideoService {
         createdAt: new Date().toISOString(),
         creatorId: 'creator1',
         tags: ['wedding', 'romance'],
+        isPublic: true
+      },
+      {
+        id: '755f7bdc-2026-4037-b15d-469397e29010',
+        src: 'https://vz-97606b97-31d.b-cdn.net/755f7bdc-2026-4037-b15d-469397e29010/playlist.m3u8',
+        username: 'synthetikmedia',
+        description: 'Romantic Moments 💍',
+        likes: 5678,
+        comments: 234,
+        shares: 89,
+        views: 12000,
+        duration: 45,
+        createdAt: new Date().toISOString(),
+        creatorId: 'creator1',
+        tags: ['romance', 'moments'],
+        isPublic: true
+      },
+      {
+        id: '533f6ad4-cf07-4846-b232-c7f79dce11a5',
+        src: 'https://vz-97606b97-31d.b-cdn.net/533f6ad4-cf07-4846-b232-c7f79dce11a5/playlist.m3u8',
+        username: 'synthetikmedia',
+        description: 'Wedding Celebration 🎊',
+        likes: 9012,
+        comments: 345,
+        shares: 123,
+        views: 18000,
+        duration: 60,
+        createdAt: new Date().toISOString(),
+        creatorId: 'creator1',
+        tags: ['wedding', 'celebration'],
+        isPublic: true
+      },
+      {
+        id: 'ab57b1fe-df73-4bcc-8f57-b7869519b62d',
+        src: 'https://vz-97606b97-31d.b-cdn.net/ab57b1fe-df73-4bcc-8f57-b7869519b62d/playlist.m3u8',
+        username: 'synthetikmedia',
+        description: 'Love Story 💖',
+        likes: 3456,
+        comments: 123,
+        shares: 45,
+        views: 8500,
+        duration: 35,
+        createdAt: new Date().toISOString(),
+        creatorId: 'creator1',
+        tags: ['love', 'story'],
+        isPublic: true
+      },
+      {
+        id: '67254311-41da-4200-a59c-429995a0755f',
+        src: 'https://vz-97606b97-31d.b-cdn.net/67254311-41da-4200-a59c-429995a0755f/playlist.m3u8',
+        username: 'synthetikmedia',
+        description: 'Forever Together 👰🤵',
+        likes: 7890,
+        comments: 456,
+        shares: 234,
+        views: 15000,
+        duration: 50,
+        createdAt: new Date().toISOString(),
+        creatorId: 'creator1',
+        tags: ['wedding', 'forever'],
         isPublic: true
       }
     ]
