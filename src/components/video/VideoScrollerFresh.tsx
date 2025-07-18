@@ -280,10 +280,10 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
         </div>
       )}
       
-      {/* Creator info overlay - EXTREME DEBUG MODE */}
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white p-8 z-[9999] border-8 border-yellow-400 text-2xl font-bold">
-        @{video.username}<br/>
-        {video.description}
+      {/* Creator info overlay - positioned well above mobile navigation */}
+      <div className="absolute bottom-48 md:bottom-[120px] left-1/2 transform -translate-x-1/2 text-white pointer-events-none text-center z-40">
+        <p className="font-bold text-lg">@{video.username}</p>
+        <p className="text-sm opacity-90">{video.description}</p>
       </div>
 
       {/* Mute indicator */}
