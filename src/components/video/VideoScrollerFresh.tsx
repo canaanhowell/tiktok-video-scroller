@@ -1,7 +1,9 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
+import Link from 'next/link'
 import Hls from 'hls.js'
+import { colors, colorClasses } from '@/config/colors'
 
 interface Video {
   id: string
@@ -49,7 +51,7 @@ export function VideoScrollerFresh({ videos, className, onVideoChange }: VideoSc
   return (
     <div
       ref={scrollerRef}
-      className={`h-full w-full overflow-y-scroll snap-y snap-mandatory bg-black ${className || ''}`}
+      className={`h-full w-full overflow-y-scroll snap-y snap-mandatory bg-white ${className || ''}`}
       style={{ 
         scrollbarWidth: 'none', 
         msOverflowStyle: 'none',
@@ -248,7 +250,7 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
 
   return (
     <div 
-      className="snap-start h-screen w-full relative bg-black flex items-center justify-center"
+      className="snap-start h-screen w-full relative bg-white flex items-center justify-center"
       onClick={handleClick}
     >
       <video
@@ -259,6 +261,13 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
         muted={isMuted}
         preload="metadata"
       />
+      
+      {/* Category overlay - positioned with percentage for responsive placement */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[7%] md:top-[12%] left-[5%] z-40">
+          <span className="text-sm font-medium capitalize text-white bg-black/50 px-3 py-1.5 rounded-md">Photographers</span>
+        </div>
+      </div>
       
       {/* Loading indicator */}
       {isLoading && !error && (
@@ -279,12 +288,17 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
           </div>
         </div>
       )}
-      
-      {/* Creator info overlay - positioned well above mobile navigation */}
-      <div className="absolute bottom-48 md:bottom-[120px] left-1/2 transform -translate-x-1/2 text-white pointer-events-none text-center z-40">
-        <p className="font-bold text-lg">@{video.username}</p>
-        <p className="text-sm opacity-90">{video.description}</p>
-      </div>
+
+      {/* Vendor button - positioned well above mobile navigation */}
+      <Link 
+        href="#" 
+        className="absolute bottom-56 md:bottom-[140px] left-1/2 transform -translate-x-1/2 z-40 flex flex-col items-center gap-1"
+      >
+        <div className={`${colorClasses.bgAccent} ${colorClasses.textPrimary} px-4 py-2 rounded-md ${colorClasses.hoverAccent} transition`}>
+          <h3 className="text-base font-semibold">Explore Vendor</h3>
+        </div>
+        <span className={`text-sm ${colorClasses.textSecondary}`}>example.com</span>
+      </Link>
 
       {/* Mute indicator */}
       {isMuted && isActive && !isLoading && !error && (

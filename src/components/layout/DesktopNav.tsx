@@ -4,6 +4,7 @@ import { MapPin, Camera, Video, Music, Disc3, Building2, UserPlus, Settings, Hea
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { colors, colorClasses } from '@/config/colors'
 
 const topNavItems = [
   { icon: Building2, href: '/vendor-hq', label: 'Vendor HQ' },
@@ -26,9 +27,11 @@ export function DesktopNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="hidden md:block fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-black border-r border-gray-800 z-40">
-      <div className="p-4">
-        {/* Logo moved to TopNav */}
+    <nav className={cn("hidden md:block fixed left-0 top-0 h-screen w-64 z-40", colorClasses.bgSecondary, colorClasses.borderDark, "border-r")}>
+      <div className="h-16 flex items-center px-6">
+        <Link href="/" className="text-2xl font-bold text-white">
+          True Harmonic
+        </Link>
       </div>
       
       <div className="mt-8">
@@ -36,7 +39,7 @@ export function DesktopNav() {
         <div className="px-6 mb-4">
           <Link
             href="/vendor-enrollment"
-            className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md hover:bg-white/90 transition w-full"
+            className={cn("flex items-center justify-center gap-2 px-4 py-2 rounded-md transition w-full", colorClasses.bgAccent, colorClasses.textPrimary, colorClasses.hoverAccent)}
           >
             <UserPlus className="w-4 h-4" />
             <span className="font-medium">Vendor Enrollment</span>
@@ -54,8 +57,8 @@ export function DesktopNav() {
               href={item.href}
               className={cn(
                 'flex items-center gap-4 px-6 py-4',
-                'transition-colors duration-200 hover:bg-gray-900',
-                isActive ? 'text-white bg-gray-900' : 'text-gray-400'
+                'transition-colors duration-200 hover:bg-true-harmonic-secondary/80',
+                isActive ? 'text-white bg-true-harmonic-secondary/80' : 'text-gray-300'
               )}
             >
               <Icon size={24} />
@@ -66,6 +69,11 @@ export function DesktopNav() {
         
         {/* 50px margin between sections */}
         <div className="h-[50px]" />
+        
+        {/* Category Header */}
+        <div className="px-6 pb-4">
+          <h3 className="text-white font-bold text-lg">Category</h3>
+        </div>
         
         {/* Middle Navigation Section - Vendor Categories */}
         {navItems.map((item) => {
@@ -78,8 +86,8 @@ export function DesktopNav() {
               href={item.href}
               className={cn(
                 'flex items-center gap-4 px-6 py-4',
-                'transition-colors duration-200 hover:bg-gray-900',
-                isActive ? 'text-white bg-gray-900' : 'text-gray-400'
+                'transition-colors duration-200 hover:bg-true-harmonic-secondary/80',
+                isActive ? 'text-white bg-true-harmonic-secondary/80' : 'text-gray-300'
               )}
             >
               <Icon size={24} />
@@ -102,8 +110,8 @@ export function DesktopNav() {
               href={item.href}
               className={cn(
                 'flex items-center gap-4 px-6 py-4',
-                'transition-colors duration-200 hover:bg-gray-900',
-                isActive ? 'text-white bg-gray-900' : 'text-gray-400'
+                'transition-colors duration-200 hover:bg-true-harmonic-secondary/80',
+                isActive ? 'text-white bg-true-harmonic-secondary/80' : 'text-gray-300'
               )}
             >
               <Icon size={24} />

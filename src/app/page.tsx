@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { VideoScrollerFresh } from '@/components/video/VideoScrollerFresh'
 import { Typography } from '@/components/ui/Typography'
 import { videoService } from '@/services/videos'
@@ -125,7 +126,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen md:h-screen h-[calc(100vh-64px)] w-full bg-black relative flex justify-center">
+    <div className="h-screen md:h-screen h-[calc(100vh-64px)] w-full bg-white relative flex justify-center">
       {/* Video Scroller - Fixed width on larger screens */}
       <div className="w-full sm:w-[430px] h-full relative">
         <VideoScrollerFresh
@@ -143,18 +144,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Scroll hint - only on desktop, positioned below video */}
-        <div className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none items-center gap-1 text-white/70 animate-pulse">
-          <span className="text-sm font-medium">scroll</span>
-          <svg 
-            className="w-4 h-4" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </div>
       </div>
     </div>
   )
