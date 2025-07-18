@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, Search, Plus, MessageCircle, User } from 'lucide-react'
+import { Home, Search, Grid3x3, Heart } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -8,9 +8,8 @@ import { cn } from '@/lib/utils'
 const navItems = [
   { icon: Home, href: '/', label: 'Home' },
   { icon: Search, href: '/search', label: 'Search' },
-  { icon: Plus, href: '/upload', label: 'Upload' },
-  { icon: MessageCircle, href: '/messages', label: 'Messages' },
-  { icon: User, href: '/profile', label: 'Profile' },
+  { icon: Grid3x3, href: '/category', label: 'Category' },
+  { icon: Heart, href: '/saved', label: 'Saved' },
 ]
 
 export function MobileNav() {

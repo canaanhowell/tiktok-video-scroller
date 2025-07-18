@@ -142,6 +142,19 @@ export default function Home() {
             </Typography>
           </div>
         </div>
+
+        {/* Scroll hint - only on desktop, positioned below video */}
+        <div className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none items-center gap-1 text-white/70 animate-pulse">
+          <span className="text-sm font-medium">scroll</span>
+          <svg 
+            className="w-4 h-4" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </div>
       </div>
     </div>
   )
