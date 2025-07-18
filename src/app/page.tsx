@@ -125,20 +125,22 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen w-full bg-black relative">
-      {/* Video Scroller */}
-      <VideoScrollerFresh
-        videos={videos}
-        onVideoChange={handleVideoChange}
-      />
-      
-      {/* Development overlay */}
-      <div className="absolute top-4 left-4 z-30 pointer-events-none">
-        <div className="bg-black/50 backdrop-blur rounded-lg px-3 py-2">
-          <Typography variant="caption" className="text-white/80">
-            Video {currentVideo + 1} of {videos.length}
-            {videos === demoVideos && ' (Demo)'}
-          </Typography>
+    <div className="h-screen md:h-screen h-[calc(100vh-64px)] w-full bg-black relative flex justify-center">
+      {/* Video Scroller - Fixed width on larger screens */}
+      <div className="w-full sm:w-[430px] h-full relative">
+        <VideoScrollerFresh
+          videos={videos}
+          onVideoChange={handleVideoChange}
+        />
+        
+        {/* Development overlay */}
+        <div className="absolute top-4 left-4 z-30 pointer-events-none">
+          <div className="bg-black/50 backdrop-blur rounded-lg px-3 py-2">
+            <Typography variant="caption" className="text-white/80">
+              Video {currentVideo + 1} of {videos.length}
+              {videos === demoVideos && ' (Demo)'}
+            </Typography>
+          </div>
         </div>
       </div>
     </div>
