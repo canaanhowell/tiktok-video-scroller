@@ -279,10 +279,9 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
         </div>
       )}
       
-      {/* Creator info overlay - positioned to avoid mobile nav */}
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 text-white pointer-events-none text-center">
-        <p className="font-bold text-lg">@{video.username}</p>
-        <p className="text-sm opacity-90">{video.description}</p>
+      {/* TESTING - BRIGHT YELLOW BOX */}
+      <div className="fixed top-0 left-0 w-full bg-yellow-400 text-black text-center p-8 z-[99999] text-4xl font-bold">
+        TESTING: @{video.username} - {video.description}
       </div>
 
       {/* Mute indicator */}
