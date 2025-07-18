@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 
 export function TopNav() {
   return (
-    <div className={cn("hidden md:flex fixed top-0 left-64 right-0 h-16 z-50", colorClasses.bgPrimary, colorClasses.borderLight, "border-b")}>
+    <div className={cn("hidden md:flex fixed top-0 left-64 right-0 h-16 z-50", colorClasses.bgPrimary)}>
       <div className="w-full h-full relative">
         {/* Search Bar - Centered in the available space */}
         <div className="absolute left-0 right-0 flex justify-center top-1/2 -translate-y-1/2">

@@ -27,9 +27,9 @@ export function DesktopNav() {
   const pathname = usePathname()
 
   return (
-    <nav className={cn("hidden md:block fixed left-0 top-0 h-screen w-64 z-40", colorClasses.bgSecondary, colorClasses.borderDark, "border-r")}>
+    <nav className={cn("hidden md:block fixed left-0 top-0 h-screen w-64 z-40", colorClasses.bgSecondary)}>
       <div className="h-16 flex items-center px-6">
-        <Link href="/" className="text-2xl font-bold text-white">
+        <Link href="/" className="text-2xl font-bold text-gray-800">
           True Harmonic
         </Link>
       </div>
@@ -57,8 +57,8 @@ export function DesktopNav() {
               href={item.href}
               className={cn(
                 'flex items-center gap-4 px-6 py-4',
-                'transition-colors duration-200 hover:bg-true-harmonic-secondary/80',
-                isActive ? 'text-white bg-true-harmonic-secondary/80' : 'text-gray-300'
+                'transition-colors duration-200 hover:bg-true-harmonic-secondary/30',
+                isActive ? 'text-gray-800 bg-true-harmonic-secondary/50' : 'text-gray-700'
               )}
             >
               <Icon size={24} />
@@ -72,7 +72,7 @@ export function DesktopNav() {
         
         {/* Category Header */}
         <div className="px-6 pb-4">
-          <h3 className="text-white font-bold text-lg">Category</h3>
+          <h3 className="text-gray-800 font-bold text-lg">Category</h3>
         </div>
         
         {/* Middle Navigation Section - Vendor Categories */}
@@ -86,8 +86,8 @@ export function DesktopNav() {
               href={item.href}
               className={cn(
                 'flex items-center gap-4 px-6 py-4',
-                'transition-colors duration-200 hover:bg-true-harmonic-secondary/80',
-                isActive ? 'text-white bg-true-harmonic-secondary/80' : 'text-gray-300'
+                'transition-colors duration-200 hover:bg-true-harmonic-secondary/30',
+                isActive ? 'text-gray-800 bg-true-harmonic-secondary/50' : 'text-gray-700'
               )}
             >
               <Icon size={24} />
@@ -110,8 +110,8 @@ export function DesktopNav() {
               href={item.href}
               className={cn(
                 'flex items-center gap-4 px-6 py-4',
-                'transition-colors duration-200 hover:bg-true-harmonic-secondary/80',
-                isActive ? 'text-white bg-true-harmonic-secondary/80' : 'text-gray-300'
+                'transition-colors duration-200 hover:bg-true-harmonic-secondary/30',
+                isActive ? 'text-gray-800 bg-true-harmonic-secondary/50' : 'text-gray-700'
               )}
             >
               <Icon size={24} />

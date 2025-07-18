@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Hls from 'hls.js'
+import { Heart, Share2 } from 'lucide-react'
 import { colors, colorClasses } from '@/config/colors'
 
 interface Video {
@@ -87,6 +88,8 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
   const [hasInteracted, setHasInteracted] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isLiked, setIsLiked] = useState(false)
+  const [isShared, setIsShared] = useState(false)
 
   // Simple but functional HLS setup
   useEffect(() => {
@@ -248,25 +251,69 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
     }
   }
 
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent video click
+    setIsLiked(!isLiked)
+    // TODO: Send like to backend with video.id
+  }
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent video click
+    setIsShared(true)
+    // TODO: Implement share functionality with video metadata
+    // For now, just copy link to clipboard
+    navigator.clipboard.writeText(window.location.origin + '/video/' + video.id)
+  }
+
   return (
     <div 
       className="snap-start h-screen w-full relative bg-white flex items-center justify-center"
-      onClick={handleClick}
     >
-      <video
-        ref={videoRef}
-        className="h-full w-full object-contain"
-        loop
-        playsInline
-        muted={isMuted}
-        preload="metadata"
-      />
-      
-      {/* Category overlay - positioned with percentage for responsive placement */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[7%] md:top-[12%] left-[5%] z-40">
+      {/* Video container */}
+      <div className="relative h-full w-full flex items-center justify-center" onClick={handleClick}>
+        <video
+          ref={videoRef}
+          className="h-full w-full object-contain"
+          loop
+          playsInline
+          muted={isMuted}
+          preload="metadata"
+        />
+        
+        {/* Category overlay - fixed to top left of video */}
+        <div className="absolute top-[13%] left-[7%] z-40 pointer-events-none">
           <span className="text-sm font-medium capitalize text-white bg-black/50 px-3 py-1.5 rounded-md">Photographers</span>
         </div>
+        
+        {/* Vendor button - fixed to bottom center of video */}
+        <Link 
+          href="#" 
+          className="absolute bottom-[5%] left-1/2 transform -translate-x-1/2 z-40"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className={`${colorClasses.bgAccent} ${colorClasses.textPrimary} px-4 py-2 rounded-md ${colorClasses.hoverAccent} transition flex flex-col items-center gap-1`}>
+            <h3 className="text-base font-semibold">Explore Vendor</h3>
+            <span className="text-sm">example.com</span>
+          </div>
+        </Link>
+      </div>
+      
+      {/* Action buttons - positioned outside video container */}
+      <div className="hidden md:flex absolute right-10 top-1/2 transform -translate-y-1/2 flex-col gap-4 z-40">
+        <button 
+          onClick={handleLike}
+          className={`p-3 rounded-full transition ${isLiked ? 'bg-red-500 hover:bg-red-600' : 'bg-black/50 hover:bg-black/70'}`}
+          aria-label="Like video"
+        >
+          <Heart className={`w-6 h-6 ${isLiked ? 'text-white fill-white' : 'text-white'}`} />
+        </button>
+        <button 
+          onClick={handleShare}
+          className="p-3 bg-black/50 rounded-full hover:bg-black/70 transition"
+          aria-label="Share video"
+        >
+          <Share2 className="w-6 h-6 text-white" />
+        </button>
       </div>
       
       {/* Loading indicator */}
@@ -289,16 +336,6 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
         </div>
       )}
 
-      {/* Vendor button - positioned well above mobile navigation */}
-      <Link 
-        href="#" 
-        className="absolute bottom-56 md:bottom-[140px] left-1/2 transform -translate-x-1/2 z-40 flex flex-col items-center gap-1"
-      >
-        <div className={`${colorClasses.bgAccent} ${colorClasses.textPrimary} px-4 py-2 rounded-md ${colorClasses.hoverAccent} transition`}>
-          <h3 className="text-base font-semibold">Explore Vendor</h3>
-        </div>
-        <span className={`text-sm ${colorClasses.textSecondary}`}>example.com</span>
-      </Link>
 
       {/* Mute indicator */}
       {isMuted && isActive && !isLoading && !error && (

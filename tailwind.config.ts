@@ -35,7 +35,7 @@ const config: Config = {
         },
         'true-harmonic': {
           primary: '#ffffff',
-          secondary: '#66686b',
+          secondary: '#dadde2',
           accent: '#f4c82d',
         },
       },

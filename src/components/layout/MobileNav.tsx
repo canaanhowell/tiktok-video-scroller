@@ -43,7 +43,7 @@ export function MobileNav() {
       {showCategories && (
         <div 
           ref={menuRef}
-          className="fixed bottom-16 left-0 right-0 z-50 bg-[#66686b] border-t border-gray-600 md:hidden"
+          className="fixed bottom-16 left-0 right-0 z-50 bg-[#dadde2] border-t border-gray-300 md:hidden"
         >
           <div className="max-h-[60vh] overflow-y-auto">
             {vendorCategories.map((item) => {
@@ -57,8 +57,8 @@ export function MobileNav() {
                   onClick={() => setShowCategories(false)}
                   className={cn(
                     'flex items-center gap-4 px-6 py-4',
-                    'transition-colors duration-200 hover:bg-[#66686b]/80',
-                    isActive ? 'text-white bg-[#66686b]/80' : 'text-gray-300'
+                    'transition-colors duration-200 hover:bg-[#dadde2]/80',
+                    isActive ? 'text-gray-800 bg-[#dadde2]/80' : 'text-gray-600'
                   )}
                 >
                   <Icon size={24} />
@@ -71,14 +71,14 @@ export function MobileNav() {
       )}
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#66686b] border-t border-gray-600 md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#dadde2] border-t border-gray-300 md:hidden">
         <div className="flex items-center justify-around h-16">
           <Link
             href="/"
             className={cn(
               'flex flex-col items-center justify-center w-full h-full tap-highlight-transparent',
               'transition-colors duration-200',
-              pathname === '/' ? 'text-white' : 'text-gray-400'
+              pathname === '/' ? 'text-gray-800' : 'text-gray-600'
             )}
           >
             <Home size={24} />
@@ -90,7 +90,7 @@ export function MobileNav() {
             className={cn(
               'flex flex-col items-center justify-center w-full h-full tap-highlight-transparent',
               'transition-colors duration-200',
-              pathname === '/search' ? 'text-white' : 'text-gray-400'
+              pathname === '/search' ? 'text-gray-800' : 'text-gray-600'
             )}
           >
             <Search size={24} />
@@ -102,7 +102,7 @@ export function MobileNav() {
             className={cn(
               'flex flex-col items-center justify-center w-full h-full tap-highlight-transparent',
               'transition-colors duration-200',
-              showCategories ? 'text-white' : 'text-gray-400'
+              showCategories ? 'text-gray-800' : 'text-gray-600'
             )}
           >
             <ChevronUp size={24} className={cn(
@@ -117,7 +117,7 @@ export function MobileNav() {
             className={cn(
               'flex flex-col items-center justify-center w-full h-full tap-highlight-transparent',
               'transition-colors duration-200',
-              pathname === '/saved' ? 'text-white' : 'text-gray-400'
+              pathname === '/saved' ? 'text-gray-800' : 'text-gray-600'
             )}
           >
             <Heart size={24} />

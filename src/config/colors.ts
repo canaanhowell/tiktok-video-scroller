@@ -1,13 +1,13 @@
 // Color system for True Harmonic
 export const colors = {
   primary: '#ffffff',      // White
-  secondary: '#66686b',    // Charcoal grey
+  secondary: '#dadde2',    // Light grey
   accent: '#f4c82d',       // Yellow
   
   // Derived colors
   text: {
     primary: '#000000',
-    secondary: '#66686b',
+    secondary: '#dadde2',
     white: '#ffffff',
     muted: '#9ca3af'
   },
