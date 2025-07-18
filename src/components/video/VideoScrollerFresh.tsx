@@ -280,8 +280,8 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
         </div>
       )}
       
-      {/* Creator info overlay - responsive positioning for mobile nav */}
-      <div className="absolute bottom-20 md:bottom-[120px] left-1/2 transform -translate-x-1/2 text-white pointer-events-none text-center z-40">
+      {/* Creator info overlay - mobile nav debugging */}
+      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 text-white pointer-events-none text-center z-40 bg-red-500/50 p-2">
         <p className="font-bold text-lg">@{video.username}</p>
         <p className="text-sm opacity-90">{video.description}</p>
       </div>

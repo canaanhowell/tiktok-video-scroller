@@ -125,7 +125,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen w-full bg-black relative flex justify-center">
+    <div className="h-screen md:h-screen h-[calc(100vh-64px)] w-full bg-black relative flex justify-center">
       {/* Video Scroller - Fixed width on larger screens */}
       <div className="w-full sm:w-[430px] h-full relative">
         <VideoScrollerFresh
