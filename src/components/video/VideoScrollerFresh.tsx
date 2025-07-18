@@ -23,6 +23,7 @@ interface VideoScrollerProps {
 export function VideoScrollerFresh({ videos, className, onVideoChange }: VideoScrollerProps) {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [globalUnmuted, setGlobalUnmuted] = useState(false) // Track if user has ever unmuted
 
   // Dead simple scroll detection
   useEffect(() => {
@@ -61,6 +62,8 @@ export function VideoScrollerFresh({ videos, className, onVideoChange }: VideoSc
           video={video}
           index={index}
           isActive={index === currentIndex}
+          globalUnmuted={globalUnmuted}
+          onUnmute={() => setGlobalUnmuted(true)}
         />
       ))}
     </div>
@@ -71,9 +74,11 @@ interface VideoItemProps {
   video: Video
   index: number
   isActive: boolean
+  globalUnmuted: boolean
+  onUnmute: () => void
 }
 
-function VideoItemFresh({ video, index, isActive }: VideoItemProps) {
+function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: VideoItemProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const hlsRef = useRef<Hls | null>(null)
   const [isMuted, setIsMuted] = useState(true)
@@ -189,15 +194,18 @@ function VideoItemFresh({ video, index, isActive }: VideoItemProps) {
     }
   }, [video.src, index])
 
-  // Simple play/pause
+  // Simple play/pause with persistent unmute behavior
   useEffect(() => {
     const videoElement = videoRef.current
     if (!videoElement) return
 
     if (isActive && !isLoading && !error) {
       console.log(`[FRESH] Playing video ${index + 1}`)
-      videoElement.muted = !hasInteracted
-      setIsMuted(!hasInteracted)
+      
+      // If globally unmuted or user has interacted with this video, start unmuted
+      const shouldBeUnmuted = globalUnmuted || hasInteracted
+      videoElement.muted = !shouldBeUnmuted
+      setIsMuted(!shouldBeUnmuted)
       
       videoElement.play().catch((err) => {
         console.log(`[FRESH] Play failed, trying muted:`, err.message)
@@ -208,8 +216,13 @@ function VideoItemFresh({ video, index, isActive }: VideoItemProps) {
     } else {
       console.log(`[FRESH] Pausing video ${index + 1}`)
       videoElement.pause()
+      // Mute when scrolling away to prevent background audio
+      if (videoElement) {
+        videoElement.muted = true
+        setIsMuted(true)
+      }
     }
-  }, [isActive, hasInteracted, index, isLoading, error])
+  }, [isActive, hasInteracted, globalUnmuted, index, isLoading, error])
 
   const handleClick = () => {
     const videoElement = videoRef.current
@@ -219,10 +232,16 @@ function VideoItemFresh({ video, index, isActive }: VideoItemProps) {
       setHasInteracted(true)
       videoElement.muted = false
       setIsMuted(false)
+      onUnmute() // Trigger global unmute for all future videos
     } else {
       const newMuted = !videoElement.muted
       videoElement.muted = newMuted
       setIsMuted(newMuted)
+      
+      // If user unmutes after initial interaction, also trigger global unmute
+      if (!newMuted) {
+        onUnmute()
+      }
     }
   }
 
@@ -270,7 +289,7 @@ function VideoItemFresh({ video, index, isActive }: VideoItemProps) {
       {isMuted && isActive && !isLoading && !error && (
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
           <div className="bg-black bg-opacity-70 text-white px-4 py-2 rounded">
-            Tap to unmute
+            {globalUnmuted ? 'Tap to toggle sound' : 'Tap to unmute'}
           </div>
         </div>
       )}
