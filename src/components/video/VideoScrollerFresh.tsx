@@ -36,7 +36,7 @@ export function VideoScrollerFresh({ videos, className, onVideoChange }: VideoSc
       const newIndex = Math.round(scrollTop / containerHeight)
       
       if (newIndex !== currentIndex && newIndex >= 0 && newIndex < videos.length) {
-        console.log(`[FRESH] Changed to video ${newIndex + 1}`)
+        console.log(`[SCROLLER] 📱 Scrolled to video ${newIndex + 1}/${videos.length} - @${videos[newIndex].username}`)
         setCurrentIndex(newIndex)
         onVideoChange?.(newIndex, videos[newIndex])
       }
@@ -91,13 +91,13 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
     const videoElement = videoRef.current
     if (!videoElement) return
 
-    console.log(`[FRESH] Setting up video ${index + 1}`)
+    console.log(`[VIDEO] 🎬 Setting up video ${index + 1} - @${video.username}: "${video.description}"`)
     
     const isHLS = video.src.includes('.m3u8')
     
     if (isHLS) {
       if (Hls.isSupported()) {
-        console.log(`[FRESH] Using HLS.js for video ${index + 1}`)
+        console.log(`[HLS] 🔧 Using HLS.js for video ${index + 1}`)
         
         // Clean up existing HLS
         if (hlsRef.current) {
@@ -119,13 +119,13 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
         hlsRef.current = hls
         
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          console.log(`[FRESH] HLS ready for video ${index + 1}`)
+          console.log(`[HLS] ✅ Ready for video ${index + 1} - @${video.username}`)
           setIsLoading(false)
           setError(null)
         })
         
         hls.on(Hls.Events.ERROR, (event, data) => {
-          console.error(`[FRESH] HLS error for video ${index + 1}:`, data)
+          console.error(`[HLS] ❌ Error for video ${index + 1} - @${video.username}:`, data)
           if (data.fatal) {
             setError(`Video error: ${data.details || 'Unknown error'}`)
             setIsLoading(false)
@@ -142,17 +142,17 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
           }
         }
       } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-        console.log(`[FRESH] Using native HLS for video ${index + 1}`)
+        console.log(`[HLS] 🍎 Using native Safari HLS for video ${index + 1}`)
         videoElement.src = video.src
         
         const handleCanPlay = () => {
-          console.log(`[FRESH] Native HLS ready for video ${index + 1}`)
+          console.log(`[HLS] ✅ Native Safari ready for video ${index + 1} - @${video.username}`)
           setIsLoading(false)
           setError(null)
         }
         
         const handleError = (e: any) => {
-          console.error(`[FRESH] Native HLS error for video ${index + 1}:`, e)
+          console.error(`[HLS] ❌ Native Safari error for video ${index + 1} - @${video.username}:`, e)
           setError('Video loading failed')
           setIsLoading(false)
         }
@@ -169,17 +169,17 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
         setIsLoading(false)
       }
     } else {
-      console.log(`[FRESH] Using regular video for video ${index + 1}`)
+      console.log(`[VIDEO] 📹 Using regular video for video ${index + 1}`)
       videoElement.src = video.src
       
       const handleCanPlay = () => {
-        console.log(`[FRESH] Regular video ready for video ${index + 1}`)
+        console.log(`[VIDEO] ✅ Regular video ready for video ${index + 1} - @${video.username}`)
         setIsLoading(false)
         setError(null)
       }
       
       const handleError = (e: any) => {
-        console.error(`[FRESH] Regular video error for video ${index + 1}:`, e)
+        console.error(`[VIDEO] ❌ Regular video error for video ${index + 1} - @${video.username}:`, e)
         setError('Video loading failed')
         setIsLoading(false)
       }
@@ -200,21 +200,22 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
     if (!videoElement) return
 
     if (isActive && !isLoading && !error) {
-      console.log(`[FRESH] Playing video ${index + 1}`)
-      
       // If globally unmuted or user has interacted with this video, start unmuted
       const shouldBeUnmuted = globalUnmuted || hasInteracted
+      const muteStatus = shouldBeUnmuted ? '🔊' : '🔇'
+      console.log(`[PLAYBACK] ▶️ Playing video ${index + 1} ${muteStatus} - @${video.username}`)
+      
       videoElement.muted = !shouldBeUnmuted
       setIsMuted(!shouldBeUnmuted)
       
       videoElement.play().catch((err) => {
-        console.log(`[FRESH] Play failed, trying muted:`, err.message)
+        console.log(`[PLAYBACK] 🔇 Play failed, retrying muted - ${err.message}`)
         videoElement.muted = true
         setIsMuted(true)
         videoElement.play().catch(console.error)
       })
     } else {
-      console.log(`[FRESH] Pausing video ${index + 1}`)
+      console.log(`[PLAYBACK] ⏸️ Pausing video ${index + 1} - @${video.username}`)
       videoElement.pause()
       // Mute when scrolling away to prevent background audio
       if (videoElement) {
