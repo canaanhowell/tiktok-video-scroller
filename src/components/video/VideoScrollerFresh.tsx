@@ -84,12 +84,14 @@ interface VideoItemProps {
 function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: VideoItemProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const hlsRef = useRef<Hls | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [isMuted, setIsMuted] = useState(true)
   const [hasInteracted, setHasInteracted] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isLiked, setIsLiked] = useState(false)
   const [isShared, setIsShared] = useState(false)
+  const [videoBounds, setVideoBounds] = useState({ width: 0, left: 0 })
 
   // Simple but functional HLS setup
   useEffect(() => {
@@ -230,6 +232,52 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
     }
   }, [isActive, hasInteracted, globalUnmuted, index, isLoading, error])
 
+  // Calculate actual video dimensions after object-contain scaling
+  useEffect(() => {
+    const calculateVideoBounds = () => {
+      const video = videoRef.current
+      const container = containerRef.current
+      if (!video || !container) return
+
+      const containerRect = container.getBoundingClientRect()
+      const videoAspectRatio = video.videoWidth / video.videoHeight
+      const containerAspectRatio = containerRect.width / containerRect.height
+
+      let actualWidth, actualLeft
+
+      if (videoAspectRatio > containerAspectRatio) {
+        // Video is wider - will be constrained by width
+        actualWidth = containerRect.width
+        actualLeft = containerRect.left
+      } else {
+        // Video is taller - will be constrained by height
+        actualWidth = containerRect.height * videoAspectRatio
+        actualLeft = containerRect.left + (containerRect.width - actualWidth) / 2
+      }
+
+      setVideoBounds({ width: actualWidth, left: actualLeft })
+    }
+
+    // Calculate on video metadata load and window resize
+    const video = videoRef.current
+    if (video) {
+      video.addEventListener('loadedmetadata', calculateVideoBounds)
+      window.addEventListener('resize', calculateVideoBounds)
+      
+      // Calculate immediately if video already has metadata
+      if (video.videoWidth) {
+        calculateVideoBounds()
+      }
+    }
+
+    return () => {
+      if (video) {
+        video.removeEventListener('loadedmetadata', calculateVideoBounds)
+      }
+      window.removeEventListener('resize', calculateVideoBounds)
+    }
+  }, [])
+
   const handleClick = () => {
     const videoElement = videoRef.current
     if (!videoElement) return
@@ -270,7 +318,7 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
       className="snap-start h-screen w-full relative bg-white flex items-center justify-center"
     >
       {/* Video container */}
-      <div className="relative h-full w-full flex items-center justify-center" onClick={handleClick}>
+      <div ref={containerRef} className="relative h-full w-full flex items-center justify-center" onClick={handleClick}>
         <video
           ref={videoRef}
           className="h-full w-full object-contain"
@@ -298,23 +346,30 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
         </Link>
       </div>
       
-      {/* Action buttons - positioned outside video container */}
-      <div className="hidden md:flex absolute right-10 top-1/2 transform -translate-y-1/2 flex-col gap-4 z-40">
-        <button 
-          onClick={handleLike}
-          className={`p-3 rounded-full transition ${isLiked ? 'bg-red-500 hover:bg-red-600' : 'bg-black/50 hover:bg-black/70'}`}
-          aria-label="Like video"
+      {/* Action buttons - positioned relative to actual video bounds */}
+      {videoBounds.width > 0 && isActive && (
+        <div 
+          className="hidden md:flex fixed top-1/2 transform -translate-y-1/2 flex-col gap-4 z-40"
+          style={{ 
+            left: `${videoBounds.left + videoBounds.width + 10}px`
+          }}
         >
-          <Heart className={`w-6 h-6 ${isLiked ? 'text-white fill-white' : 'text-white'}`} />
-        </button>
-        <button 
-          onClick={handleShare}
-          className="p-3 bg-black/50 rounded-full hover:bg-black/70 transition"
-          aria-label="Share video"
-        >
-          <Share2 className="w-6 h-6 text-white" />
-        </button>
-      </div>
+          <button 
+            onClick={handleLike}
+            className={`p-3 rounded-full transition ${isLiked ? 'bg-red-500 hover:bg-red-600' : 'bg-black/50 hover:bg-black/70'}`}
+            aria-label="Like video"
+          >
+            <Heart className={`w-6 h-6 ${isLiked ? 'text-white fill-white' : 'text-white'}`} />
+          </button>
+          <button 
+            onClick={handleShare}
+            className="p-3 bg-black/50 rounded-full hover:bg-black/70 transition"
+            aria-label="Share video"
+          >
+            <Share2 className="w-6 h-6 text-white" />
+          </button>
+        </div>
+      )}
       
       {/* Loading indicator */}
       {isLoading && !error && (

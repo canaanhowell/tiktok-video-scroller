@@ -27,16 +27,18 @@ export function DesktopNav() {
   const pathname = usePathname()
 
   return (
-    <nav className={cn("hidden md:block fixed left-0 top-0 h-screen w-64 z-40", colorClasses.bgSecondary)}>
-      <div className="h-16 flex items-center px-6">
+    <nav className={cn("hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 z-40 overflow-y-auto", colorClasses.bgSecondary)}>
+      {/* Header - Fixed height */}
+      <div className="h-16 flex items-center px-6 flex-shrink-0">
         <Link href="/" className="text-2xl font-bold text-gray-800">
           True Harmonic
         </Link>
       </div>
       
-      <div className="mt-8">
+      {/* Scrollable content area */}
+      <div className="flex-1 overflow-y-auto py-4">
         {/* Vendor Enrollment Button */}
-        <div className="px-6 mb-4">
+        <div className="px-6 mb-2">
           <Link
             href="/vendor-enrollment"
             className={cn("flex items-center justify-center gap-2 px-4 py-2 rounded-md transition w-full", colorClasses.bgAccent, colorClasses.textPrimary, colorClasses.hoverAccent)}
@@ -56,23 +58,23 @@ export function DesktopNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-4 px-6 py-4',
+                'flex items-center gap-3 px-6 py-3',
                 'transition-colors duration-200 hover:bg-true-harmonic-secondary/30',
                 isActive ? 'text-gray-800 bg-true-harmonic-secondary/50' : 'text-gray-700'
               )}
             >
-              <Icon size={24} />
-              <span className="text-lg">{item.label}</span>
+              <Icon size={20} />
+              <span className="text-base">{item.label}</span>
             </Link>
           )
         })}
         
-        {/* 50px margin between sections */}
-        <div className="h-[50px]" />
+        {/* Separator */}
+        <div className="my-4 border-t border-gray-400/30 mx-6" />
         
         {/* Category Header */}
-        <div className="px-6 pb-4">
-          <h3 className="text-gray-800 font-bold text-lg">Category</h3>
+        <div className="px-6 pb-2">
+          <h3 className="text-gray-800 font-bold text-base">Category</h3>
         </div>
         
         {/* Middle Navigation Section - Vendor Categories */}
@@ -85,19 +87,19 @@ export function DesktopNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-4 px-6 py-4',
+                'flex items-center gap-3 px-6 py-3',
                 'transition-colors duration-200 hover:bg-true-harmonic-secondary/30',
                 isActive ? 'text-gray-800 bg-true-harmonic-secondary/50' : 'text-gray-700'
               )}
             >
-              <Icon size={24} />
-              <span className="text-lg">{item.label}</span>
+              <Icon size={20} />
+              <span className="text-base">{item.label}</span>
             </Link>
           )
         })}
         
-        {/* 50px margin between sections */}
-        <div className="h-[50px]" />
+        {/* Separator */}
+        <div className="my-4 border-t border-gray-400/30 mx-6" />
         
         {/* Bottom Navigation Section - Settings */}
         {bottomNavItems.map((item) => {
@@ -109,13 +111,13 @@ export function DesktopNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-4 px-6 py-4',
+                'flex items-center gap-3 px-6 py-3',
                 'transition-colors duration-200 hover:bg-true-harmonic-secondary/30',
                 isActive ? 'text-gray-800 bg-true-harmonic-secondary/50' : 'text-gray-700'
               )}
             >
-              <Icon size={24} />
-              <span className="text-lg">{item.label}</span>
+              <Icon size={20} />
+              <span className="text-base">{item.label}</span>
             </Link>
           )
         })}
