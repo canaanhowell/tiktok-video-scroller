@@ -43,7 +43,7 @@ export function MobileNav() {
       {showCategories && (
         <div 
           ref={menuRef}
-          className="fixed bottom-16 left-0 right-0 z-50 bg-black/30 backdrop-blur-sm border-t border-white/20 md:hidden"
+          className="fixed bottom-16 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm border-t border-white/20 md:hidden"
         >
           <div className="max-h-[60vh] overflow-y-auto">
             {vendorCategories.map((item) => {
