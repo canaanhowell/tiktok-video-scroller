@@ -271,10 +271,10 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, devic
 
   return (
     <div 
-      className="snap-start h-screen w-full relative bg-white flex items-center justify-center md:items-center"
+      className="snap-start h-screen w-full relative bg-black flex items-center justify-center"
     >
       {/* Video container */}
-      <div ref={containerRef} className="relative h-full w-full flex items-center justify-center" onClick={handleClick}>
+      <div ref={containerRef} className="relative h-full w-full flex items-center justify-center -mt-[12%] md:mt-0" onClick={handleClick}>
         <video
           ref={videoRef}
           className={`h-full w-full ${deviceType === 'desktop' ? 'object-cover' : 'object-cover md:object-contain'}`}
