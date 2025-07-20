@@ -289,8 +289,20 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, devic
           <span className="text-sm font-medium capitalize text-white bg-black/50 px-3 py-1.5 rounded-md">Photographers</span>
         </div>
         
-        {/* Vendor and Music buttons - fixed to bottom center of video */}
-        <div className="absolute bottom-[23%] md:bottom-[5%] left-0 right-0 md:left-1/2 md:right-auto md:transform md:-translate-x-1/2 z-40 flex gap-2 justify-center px-[2.5vw] md:px-0 md:w-auto">
+        {/* Vendor button - fixed to bottom center of video */}
+        <Link 
+          href="#" 
+          className="absolute bottom-[23%] md:bottom-[5%] left-1/2 transform -translate-x-1/2 z-40"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className={`bg-[#f4c82d]/95 ${colorClasses.textPrimary} px-4 py-2 rounded-md hover:bg-[#f4c82d] transition flex flex-col items-center gap-1 w-[200px] md:w-auto`}>
+            <h3 className="text-base font-semibold">Explore Vendor</h3>
+            <span className="text-sm">example.com</span>
+          </div>
+        </Link>
+        
+        {/* Dual button logic - commented out for now */}
+        {/* <div className="absolute bottom-[23%] md:bottom-[5%] left-0 right-0 md:left-1/2 md:right-auto md:transform md:-translate-x-1/2 z-40 flex gap-2 justify-center px-[2.5vw] md:px-0 md:w-auto">
           <Link 
             href="#" 
             className="block flex-1 md:flex-none"
@@ -311,7 +323,7 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, devic
               <span className="text-xs md:text-sm">music.com</span>
             </div>
           </Link>
-        </div>
+        </div> */}
       </div>
       
       {/* Action buttons - positioned inside video container */}
