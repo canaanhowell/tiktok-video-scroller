@@ -371,7 +371,7 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, devic
 
       {/* Mute indicator */}
       {isMuted && isActive && !isLoading && !error && (
-        <div className="absolute top-[10%] right-4 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
           <div className="bg-black bg-opacity-50 text-white px-4 py-2 rounded">
             {globalUnmuted ? 'Tap to toggle sound' : 'Tap to unmute'}
           </div>
