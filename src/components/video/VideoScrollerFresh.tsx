@@ -296,8 +296,8 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, devic
             className="block"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={`bg-[#f4c82d]/95 ${colorClasses.textPrimary} px-3 md:px-4 py-2 rounded-md hover:bg-[#f4c82d] transition flex flex-col items-center gap-1 w-[120px] md:w-auto`}>
-              <h3 className="text-sm md:text-base font-semibold whitespace-nowrap">Explore Vendor</h3>
+            <div className={`bg-[#f4c82d]/95 ${colorClasses.textPrimary} px-3 md:px-4 py-2 rounded-md hover:bg-[#f4c82d] transition flex flex-col items-center gap-1 w-[150px] md:w-auto`}>
+              <h3 className="text-sm md:text-base font-semibold whitespace-nowrap">Explore Vendor Website</h3>
               <span className="text-xs md:text-sm">example.com</span>
             </div>
           </Link>
@@ -306,8 +306,8 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, devic
             className="block"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={`bg-[#dadde2]/95 ${colorClasses.textPrimary} px-3 md:px-4 py-2 rounded-md hover:bg-[#dadde2] transition flex flex-col items-center gap-1 w-[120px] md:w-auto`}>
-              <h3 className="text-sm md:text-base font-semibold whitespace-nowrap">Explore Music</h3>
+            <div className={`bg-[#dadde2]/95 ${colorClasses.textPrimary} px-3 md:px-4 py-2 rounded-md hover:bg-[#dadde2] transition flex flex-col items-center gap-1 w-[150px] md:w-auto`}>
+              <h3 className="text-sm md:text-base font-semibold whitespace-nowrap">Explore Vendor Website</h3>
               <span className="text-xs md:text-sm">music.com</span>
             </div>
           </Link>
