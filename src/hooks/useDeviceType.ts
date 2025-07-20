@@ -2,27 +2,44 @@ import { useState, useEffect } from 'react'
 
 export type DeviceType = 'mobile' | 'desktop' | 'tablet'
 
-export function useDeviceType(): DeviceType {
-  const [deviceType, setDeviceType] = useState<DeviceType>('mobile')
+export interface UseDeviceTypeResult {
+  deviceType: DeviceType
+  isReady: boolean
+}
+
+// Helper function to determine device type
+function getDeviceType(): DeviceType {
+  if (typeof window === 'undefined') {
+    return 'mobile' // Default for SSR
+  }
+  
+  const width = window.innerWidth
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  
+  if (width < 768) {
+    return 'mobile'
+  } else if (width >= 768 && width < 1024 && isTouchDevice) {
+    return 'tablet'
+  } else {
+    return 'desktop'
+  }
+}
+
+export function useDeviceType(): UseDeviceTypeResult {
+  // Initialize with actual device type immediately
+  const [deviceType, setDeviceType] = useState<DeviceType>(() => getDeviceType())
+  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
+    // Mark as ready after initial render
+    setIsReady(true)
+    
     const checkDevice = () => {
-      const width = window.innerWidth
-      
-      // Check if it's a touch device
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-      
-      // Determine device type based on screen width and touch capability
-      if (width < 768) {
-        setDeviceType('mobile')
-      } else if (width >= 768 && width < 1024 && isTouchDevice) {
-        setDeviceType('tablet')
-      } else {
-        setDeviceType('desktop')
-      }
+      const newDeviceType = getDeviceType()
+      setDeviceType(newDeviceType)
     }
 
-    // Initial check
+    // Double-check on mount in case SSR/hydration mismatch
     checkDevice()
 
     // Listen for resize events
@@ -33,7 +50,7 @@ export function useDeviceType(): DeviceType {
     }
   }, [])
 
-  return deviceType
+  return { deviceType, isReady }
 }
 
 // For server-side rendering, we can also check user agent

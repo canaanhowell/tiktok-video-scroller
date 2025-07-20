@@ -4,7 +4,7 @@ import { useDeviceType } from '@/hooks/useDeviceType'
 import { useState, useEffect } from 'react'
 
 export default function TestDevicePage() {
-  const deviceType = useDeviceType()
+  const { deviceType, isReady } = useDeviceType()
   const [videos, setVideos] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -29,8 +29,10 @@ export default function TestDevicePage() {
   }
 
   useEffect(() => {
-    fetchVideos(deviceType)
-  }, [deviceType])
+    if (isReady) {
+      fetchVideos(deviceType)
+    }
+  }, [deviceType, isReady])
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
@@ -38,6 +40,7 @@ export default function TestDevicePage() {
       
       <div className="bg-gray-100 p-4 rounded mb-6">
         <p className="text-lg">Current Device Type: <strong className="text-blue-600">{deviceType}</strong></p>
+        <p className="text-sm text-gray-600 mt-1">Detection Ready: <strong>{isReady ? 'Yes' : 'No'}</strong></p>
         <p className="text-sm text-gray-600 mt-2">
           Resize your browser window to see the device type change
         </p>

@@ -64,11 +64,14 @@ export default function Home() {
   const [videos, setVideos] = useState(demoVideos)
   const [loading, setLoading] = useState(true)
   const [isLiveData, setIsLiveData] = useState(false)
-  const deviceType = useDeviceType()
+  const { deviceType, isReady } = useDeviceType()
 
   useEffect(() => {
-    fetchVideos()
-  }, [deviceType])
+    // Only fetch videos once device type is ready
+    if (isReady) {
+      fetchVideos()
+    }
+  }, [deviceType, isReady])
 
   const fetchVideos = async () => {
     try {
@@ -124,10 +127,12 @@ export default function Home() {
     }
   }
 
-  if (loading) {
+  if (!isReady || loading) {
     return (
       <div className="h-viewport w-full bg-black flex items-center justify-center">
-        <div className="text-white">Loading videos...</div>
+        <div className="text-white">
+          {!isReady ? 'Detecting device...' : 'Loading videos...'}
+        </div>
       </div>
     )
   }
