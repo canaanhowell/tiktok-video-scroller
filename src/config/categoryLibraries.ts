@@ -22,6 +22,8 @@ export type VendorCategory =
   | 'videographers'
   | 'musicians'
   | 'djs'
+  | 'florists'
+  | 'wedding-cakes'
 
 // Map of categories to their Bunny CDN libraries
 // All sensitive data comes from environment variables
@@ -96,6 +98,30 @@ export const categoryLibraries: Record<VendorCategory, CategoryLibrary> = {
       libraryId: process.env.bunny_cdn_video_streaming_library_dj_16x9?.trim() || '469973',
       hostname: process.env.bunny_cdn_video_streaming_hostname_dj_16x9?.trim() || 'vz-5052a117-bbc.b-cdn.net',
       apiKey: process.env.bunny_cdn_video_streaming_key_dj_16x9?.trim() || 'a06c2983-bdbf-4312-8a6b90ac6f65-888d-4921'
+    }
+  },
+  florists: {
+    mobile: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_florists_9x16?.trim() || '467029',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_florists_9x16?.trim() || 'vz-97606b97-31d.b-cdn.net',
+      apiKey: process.env.bunny_cdn_video_streaming_key_florists_9x16?.trim() || '931f28b3-fc95-4659-a29300277c12-1643-4c31'
+    },
+    desktop: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_florists_16x9?.trim() || '469922',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_florists_16x9?.trim() || 'vz-b123ebaa-cf2.b-cdn.net',
+      apiKey: process.env.bunny_cdn_video_streaming_key_florists_16x9?.trim() || '6b9d2bc6-6ad4-47d1-9fbc96134fc8-c5dc-4643'
+    }
+  },
+  'wedding-cakes': {
+    mobile: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_wedding_cakes_9x16?.trim() || '467029',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_wedding_cakes_9x16?.trim() || 'vz-97606b97-31d.b-cdn.net',
+      apiKey: process.env.bunny_cdn_video_streaming_key_wedding_cakes_9x16?.trim() || '931f28b3-fc95-4659-a29300277c12-1643-4c31'
+    },
+    desktop: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_wedding_cakes_16x9?.trim() || '469922',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_wedding_cakes_16x9?.trim() || 'vz-b123ebaa-cf2.b-cdn.net',
+      apiKey: process.env.bunny_cdn_video_streaming_key_wedding_cakes_16x9?.trim() || '6b9d2bc6-6ad4-47d1-9fbc96134fc8-c5dc-4643'
     }
   }
 }

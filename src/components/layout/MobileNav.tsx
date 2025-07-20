@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Home, Search, ChevronUp, Heart, MapPin, Camera, Video, Music, Disc3, TrendingUp } from 'lucide-react'
+import { Home, Search, ChevronUp, Heart, MapPin, Camera, Video, Music, Disc3, TrendingUp, Flower2, Cake } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -13,6 +13,8 @@ const vendorCategories = [
   { icon: Video, href: '/videographers', label: 'Videographers' },
   { icon: Music, href: '/musicians', label: 'Musicians' },
   { icon: Disc3, href: '/djs', label: "DJ's" },
+  { icon: Flower2, href: '/florists', label: 'Florists' },
+  { icon: Cake, href: '/wedding-cakes', label: 'Wedding Cakes' },
 ]
 
 export function MobileNav() {
