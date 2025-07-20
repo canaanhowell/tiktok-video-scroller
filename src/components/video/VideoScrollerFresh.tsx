@@ -290,7 +290,7 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, devic
         </div>
         
         {/* Vendor and Music buttons - fixed to bottom center of video */}
-        <div className="absolute bottom-[23%] md:bottom-[5%] left-1/2 transform -translate-x-1/2 z-40 flex gap-2 w-[95vw] md:w-auto max-w-[95vw] md:max-w-none">
+        <div className="absolute bottom-[23%] md:bottom-[5%] left-0 right-0 md:left-1/2 md:right-auto md:transform md:-translate-x-1/2 z-40 flex gap-2 justify-center px-[2.5vw] md:px-0 md:w-auto">
           <Link 
             href="#" 
             className="block flex-1 md:flex-none"
