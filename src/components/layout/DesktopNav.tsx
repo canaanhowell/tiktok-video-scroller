@@ -41,13 +41,13 @@ export function DesktopNav() {
       } as React.CSSProperties}
     >
       {/* Header - Fixed height */}
-      <div className="h-32 flex items-center justify-center flex-shrink-0 py-4">
+      <div className="h-24 flex items-center justify-center flex-shrink-0 py-4">
         <Link href="/" className="flex items-center w-full justify-center">
           <img 
             src={`/assets/logo/true_harmonic_logo_transparent.png?v=${Date.now()}`} 
             alt="True Harmonic" 
             className="w-auto max-w-[85%]"
-            style={{ height: '120px' }}
+            style={{ height: '80px' }}
           />
         </Link>
       </div>
