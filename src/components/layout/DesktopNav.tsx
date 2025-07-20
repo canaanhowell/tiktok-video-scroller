@@ -40,8 +40,12 @@ export function DesktopNav() {
     >
       {/* Header - Fixed height */}
       <div className="h-16 flex items-center flex-shrink-0" style={{ paddingLeft: 'var(--padding-x)', paddingRight: 'var(--padding-x)' }}>
-        <Link href="/" className="font-bold text-gray-800" style={{ fontSize: 'var(--header-font-size)' }}>
-          True Harmonic
+        <Link href="/" className="flex items-center">
+          <img 
+            src="/assets/logo/true_harmonic_logo_transparent.png" 
+            alt="True Harmonic" 
+            className="h-10 w-auto"
+          />
         </Link>
       </div>
       
