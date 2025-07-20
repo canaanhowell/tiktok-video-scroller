@@ -44,7 +44,7 @@ export function DesktopNav() {
       <div className="h-64 flex items-center justify-center flex-shrink-0 py-8">
         <Link href="/" className="flex items-center w-full justify-center">
           <img 
-            src="/assets/logo/true_harmonic_logo_transparent.png" 
+            src={`/assets/logo/true_harmonic_logo_transparent.png?v=${Date.now()}`} 
             alt="True Harmonic" 
             className="w-auto max-w-[85%]"
             style={{ height: '240px' }}
