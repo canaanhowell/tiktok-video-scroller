@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils'
 
 const vendorCategories = [
   { icon: TrendingUp, href: '/popular', label: 'Popular' },
-  { icon: Heart, href: '/saved', label: 'Saved' },
   { icon: MapPin, href: '/venues', label: 'Venues' },
   { icon: Camera, href: '/photographers', label: 'Photographers' },
   { icon: Video, href: '/videographers', label: 'Videographers' },

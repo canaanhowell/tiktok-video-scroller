@@ -10,7 +10,6 @@ const topNavItems: never[] = []
 
 const navItems = [
   { icon: TrendingUp, href: '/popular', label: 'Popular' },
-  { icon: Heart, href: '/saved', label: 'Saved' },
   { icon: MapPin, href: '/venues', label: 'Venues' },
   { icon: Camera, href: '/photographers', label: 'Photographers' },
   { icon: Video, href: '/videographers', label: 'Videographers' },
@@ -19,6 +18,7 @@ const navItems = [
 ]
 
 const bottomNavItems = [
+  { icon: Heart, href: '/saved', label: 'Saved' },
   { icon: Building2, href: '/vendor-hq', label: 'Vendor HQ' },
   { icon: Settings, href: '/settings', label: 'Settings' },
 ]
