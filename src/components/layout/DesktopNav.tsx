@@ -6,9 +6,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { colors, colorClasses } from '@/config/colors'
 
-const topNavItems = [
-  { icon: Building2, href: '/vendor-hq', label: 'Vendor HQ' },
-]
+const topNavItems: never[] = []
 
 const navItems = [
   { icon: Heart, href: '/saved', label: 'Saved' },
@@ -20,6 +18,7 @@ const navItems = [
 ]
 
 const bottomNavItems = [
+  { icon: Building2, href: '/vendor-hq', label: 'Vendor HQ' },
   { icon: Settings, href: '/settings', label: 'Settings' },
 ]
 
@@ -27,54 +26,30 @@ export function DesktopNav() {
   const pathname = usePathname()
 
   return (
-    <nav className={cn("hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 z-40 overflow-y-auto", colorClasses.bgSecondary)}>
+    <nav 
+      className={cn("hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 z-40 overflow-y-auto", colorClasses.bgSecondary)}
+      style={{
+        '--base-font-size': 'clamp(0.875rem, 2.1vh, 1.125rem)',
+        '--header-font-size': 'clamp(1.25rem, 3vh, 1.75rem)',
+        '--icon-size': 'clamp(18px, 2.5vh, 24px)',
+        '--padding-y': 'clamp(0.625rem, 1.5vh, 0.875rem)',
+        '--padding-x': 'clamp(1.25rem, 2vh, 1.75rem)',
+        '--button-padding-x': 'clamp(2rem, 3vh, 2.5rem)',
+      } as React.CSSProperties}
+    >
       {/* Header - Fixed height */}
-      <div className="h-16 flex items-center px-6 flex-shrink-0">
-        <Link href="/" className="text-2xl font-bold text-gray-800">
+      <div className="h-16 flex items-center flex-shrink-0" style={{ paddingLeft: 'var(--padding-x)', paddingRight: 'var(--padding-x)' }}>
+        <Link href="/" className="font-bold text-gray-800" style={{ fontSize: 'var(--header-font-size)' }}>
           True Harmonic
         </Link>
       </div>
       
       {/* Scrollable content area */}
       <div className="flex-1 overflow-y-auto py-4">
-        {/* Vendor Enrollment Button */}
-        <div className="px-6 mb-2">
-          <Link
-            href="/vendor-enrollment"
-            className={cn("flex items-center justify-center gap-2 px-4 py-2 rounded-md transition w-full", colorClasses.bgAccent, colorClasses.textPrimary, colorClasses.hoverAccent)}
-          >
-            <UserPlus className="w-4 h-4" />
-            <span className="font-medium">Vendor Enrollment</span>
-          </Link>
-        </div>
-        
-        {/* Top Navigation Section - Vendor HQ */}
-        {topNavItems.map((item) => {
-          const Icon = item.icon
-          const isActive = pathname === item.href
-          
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'flex items-center gap-3 px-6 py-3',
-                'transition-colors duration-200 hover:bg-true-harmonic-secondary/30',
-                isActive ? 'text-gray-800 bg-true-harmonic-secondary/50' : 'text-gray-700'
-              )}
-            >
-              <Icon size={20} />
-              <span className="text-base">{item.label}</span>
-            </Link>
-          )
-        })}
-        
-        {/* Separator */}
-        <div className="my-4 border-t border-gray-400/30 mx-6" />
         
         {/* Category Header */}
-        <div className="px-6 pb-2">
-          <h3 className="text-gray-800 font-bold text-base">Category</h3>
+        <div className="pb-2" style={{ paddingLeft: 'var(--padding-x)', paddingRight: 'var(--padding-x)' }}>
+          <h3 className="text-gray-800 font-bold" style={{ fontSize: 'var(--base-font-size)' }}>Category</h3>
         </div>
         
         {/* Middle Navigation Section - Vendor Categories */}
@@ -87,21 +62,22 @@ export function DesktopNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 px-6 py-3',
+                'flex items-center gap-3',
                 'transition-colors duration-200 hover:bg-true-harmonic-secondary/30',
                 isActive ? 'text-gray-800 bg-true-harmonic-secondary/50' : 'text-gray-700'
               )}
+              style={{ paddingLeft: 'var(--padding-x)', paddingRight: 'var(--padding-x)', paddingTop: 'var(--padding-y)', paddingBottom: 'var(--padding-y)' }}
             >
-              <Icon size={20} />
-              <span className="text-base">{item.label}</span>
+              <Icon style={{ width: 'var(--icon-size)', height: 'var(--icon-size)' }} />
+              <span style={{ fontSize: 'var(--base-font-size)' }}>{item.label}</span>
             </Link>
           )
         })}
         
         {/* Separator */}
-        <div className="my-4 border-t border-gray-400/30 mx-6" />
+        <div className="my-4 border-t border-gray-400/30" style={{ marginLeft: 'var(--padding-x)', marginRight: 'var(--padding-x)' }} />
         
-        {/* Bottom Navigation Section - Settings */}
+        {/* Bottom Navigation Section - Vendor HQ & Settings */}
         {bottomNavItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href
@@ -111,13 +87,14 @@ export function DesktopNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 px-6 py-3',
+                'flex items-center gap-3',
                 'transition-colors duration-200 hover:bg-true-harmonic-secondary/30',
                 isActive ? 'text-gray-800 bg-true-harmonic-secondary/50' : 'text-gray-700'
               )}
+              style={{ paddingLeft: 'var(--padding-x)', paddingRight: 'var(--padding-x)', paddingTop: 'var(--padding-y)', paddingBottom: 'var(--padding-y)' }}
             >
-              <Icon size={20} />
-              <span className="text-base">{item.label}</span>
+              <Icon style={{ width: 'var(--icon-size)', height: 'var(--icon-size)' }} />
+              <span style={{ fontSize: 'var(--base-font-size)' }}>{item.label}</span>
             </Link>
           )
         })}

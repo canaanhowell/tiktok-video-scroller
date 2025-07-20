@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { VideoScrollerFresh } from '@/components/video/VideoScrollerFresh'
 import { Typography } from '@/components/ui/Typography'
 import { videoService } from '@/services/videos'
+import { useDeviceType } from '@/hooks/useDeviceType'
 
 // Your actual Bunny CDN videos - Updated July 16, 2025
 const bunnyVideos = [
@@ -62,28 +63,34 @@ export default function Home() {
   const [currentVideo, setCurrentVideo] = useState(0)
   const [videos, setVideos] = useState(demoVideos)
   const [loading, setLoading] = useState(true)
+  const [isLiveData, setIsLiveData] = useState(false)
+  const deviceType = useDeviceType()
 
   useEffect(() => {
     fetchVideos()
-  }, [])
+  }, [deviceType])
 
   const fetchVideos = async () => {
     try {
-      // Use video service layer instead of direct API calls
-      console.log('Fetching videos via service layer...')
-      const fetchedVideos = await videoService.getVideoFeed('current-user', { limit: 20 })
+      console.log('[Home] Fetching videos from Bunny CDN API...')
       
-      if (fetchedVideos && fetchedVideos.length > 0) {
-        console.log('Using videos from service layer:', fetchedVideos.length)
-        setVideos(fetchedVideos)
+      // Fetch from our new API route with device type
+      const response = await fetch(`/api/bunny-videos?device=${deviceType}`)
+      const data = await response.json()
+      
+      if (data.success && data.videos && data.videos.length > 0) {
+        console.log(`[Home] Successfully loaded ${data.videos.length} videos from Bunny CDN (${deviceType} library: ${data.libraryId})`)
+        setVideos(data.videos)
+        setIsLiveData(true)
       } else {
-        console.log('No videos from service layer, using demo videos')
+        console.log('[Home] No videos from API, using fallback videos')
+        console.log('[Home] API response:', data)
+        setIsLiveData(false)
         // Keep using demo videos as fallback
       }
     } catch (err) {
-      console.log('Service layer not implemented yet, using demo videos')
-      console.log('Error:', err instanceof Error ? err.message : 'Unknown error')
-      // Keep using demo videos when service is not implemented
+      console.error('[Home] Error fetching videos:', err)
+      // Keep using demo videos when API fails
     } finally {
       setLoading(false)
     }
@@ -126,24 +133,18 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen md:h-screen h-[calc(100vh-64px)] w-full bg-white relative flex justify-center">
-      {/* Video Scroller - Fixed width on larger screens */}
-      <div className="w-full sm:w-[430px] h-full relative">
+    <div className="h-[calc(100vh-64px)] md:h-screen w-full bg-white relative flex justify-center">
+      {/* Video Scroller - Responsive width based on device type */}
+      <div className={`h-full relative ${
+        deviceType === 'desktop' 
+          ? 'w-full' 
+          : 'w-full sm:w-[430px]'
+      }`}>
         <VideoScrollerFresh
           videos={videos}
           onVideoChange={handleVideoChange}
+          deviceType={deviceType}
         />
-        
-        {/* Development overlay */}
-        <div className="absolute top-4 left-4 z-30 pointer-events-none">
-          <div className="bg-black/50 backdrop-blur rounded-lg px-3 py-2">
-            <Typography variant="caption" className="text-white/80">
-              Video {currentVideo + 1} of {videos.length}
-              {videos === demoVideos && ' (Demo)'}
-            </Typography>
-          </div>
-        </div>
-
       </div>
     </div>
   )

@@ -21,9 +21,10 @@ interface VideoScrollerProps {
   videos: Video[]
   className?: string
   onVideoChange?: (index: number, video: Video) => void
+  deviceType?: 'mobile' | 'desktop' | 'tablet'
 }
 
-export function VideoScrollerFresh({ videos, className, onVideoChange }: VideoScrollerProps) {
+export function VideoScrollerFresh({ videos, className, onVideoChange, deviceType = 'mobile' }: VideoScrollerProps) {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [globalUnmuted, setGlobalUnmuted] = useState(false) // Track if user has ever unmuted
@@ -67,6 +68,7 @@ export function VideoScrollerFresh({ videos, className, onVideoChange }: VideoSc
           isActive={index === currentIndex}
           globalUnmuted={globalUnmuted}
           onUnmute={() => setGlobalUnmuted(true)}
+          deviceType={deviceType}
         />
       ))}
     </div>
@@ -79,9 +81,10 @@ interface VideoItemProps {
   isActive: boolean
   globalUnmuted: boolean
   onUnmute: () => void
+  deviceType?: 'mobile' | 'desktop' | 'tablet'
 }
 
-function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: VideoItemProps) {
+function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, deviceType = 'mobile' }: VideoItemProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const hlsRef = useRef<Hls | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -91,7 +94,6 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
   const [error, setError] = useState<string | null>(null)
   const [isLiked, setIsLiked] = useState(false)
   const [isShared, setIsShared] = useState(false)
-  const [videoBounds, setVideoBounds] = useState({ width: 0, left: 0 })
 
   // Simple but functional HLS setup
   useEffect(() => {
@@ -232,52 +234,6 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
     }
   }, [isActive, hasInteracted, globalUnmuted, index, isLoading, error])
 
-  // Calculate actual video dimensions after object-contain scaling
-  useEffect(() => {
-    const calculateVideoBounds = () => {
-      const video = videoRef.current
-      const container = containerRef.current
-      if (!video || !container) return
-
-      const containerRect = container.getBoundingClientRect()
-      const videoAspectRatio = video.videoWidth / video.videoHeight
-      const containerAspectRatio = containerRect.width / containerRect.height
-
-      let actualWidth, actualLeft
-
-      if (videoAspectRatio > containerAspectRatio) {
-        // Video is wider - will be constrained by width
-        actualWidth = containerRect.width
-        actualLeft = containerRect.left
-      } else {
-        // Video is taller - will be constrained by height
-        actualWidth = containerRect.height * videoAspectRatio
-        actualLeft = containerRect.left + (containerRect.width - actualWidth) / 2
-      }
-
-      setVideoBounds({ width: actualWidth, left: actualLeft })
-    }
-
-    // Calculate on video metadata load and window resize
-    const video = videoRef.current
-    if (video) {
-      video.addEventListener('loadedmetadata', calculateVideoBounds)
-      window.addEventListener('resize', calculateVideoBounds)
-      
-      // Calculate immediately if video already has metadata
-      if (video.videoWidth) {
-        calculateVideoBounds()
-      }
-    }
-
-    return () => {
-      if (video) {
-        video.removeEventListener('loadedmetadata', calculateVideoBounds)
-      }
-      window.removeEventListener('resize', calculateVideoBounds)
-    }
-  }, [])
-
   const handleClick = () => {
     const videoElement = videoRef.current
     if (!videoElement) return
@@ -315,13 +271,13 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
 
   return (
     <div 
-      className="snap-start h-screen w-full relative bg-white flex items-center justify-center"
+      className="snap-start h-screen w-full relative bg-white flex items-center justify-center md:items-center"
     >
       {/* Video container */}
       <div ref={containerRef} className="relative h-full w-full flex items-center justify-center" onClick={handleClick}>
         <video
           ref={videoRef}
-          className="h-full w-full object-contain"
+          className={`h-full w-full ${deviceType === 'desktop' ? 'object-cover' : 'object-cover md:object-contain'}`}
           loop
           playsInline
           muted={isMuted}
@@ -329,30 +285,27 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute }: Vid
         />
         
         {/* Category overlay - fixed to top left of video */}
-        <div className="absolute top-[13%] left-[7%] z-40 pointer-events-none">
+        <div className="absolute top-[7%] md:top-[13%] left-[6%] z-40 pointer-events-none">
           <span className="text-sm font-medium capitalize text-white bg-black/50 px-3 py-1.5 rounded-md">Photographers</span>
         </div>
         
         {/* Vendor button - fixed to bottom center of video */}
         <Link 
           href="#" 
-          className="absolute bottom-[5%] left-1/2 transform -translate-x-1/2 z-40"
+          className="absolute bottom-[23%] md:bottom-[5%] left-1/2 transform -translate-x-1/2 z-40"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={`${colorClasses.bgAccent} ${colorClasses.textPrimary} px-4 py-2 rounded-md ${colorClasses.hoverAccent} transition flex flex-col items-center gap-1`}>
+          <div className={`bg-[#f4c82d]/95 ${colorClasses.textPrimary} px-4 py-2 rounded-md hover:bg-[#f4c82d] transition flex flex-col items-center gap-1 w-[200px] md:w-auto`}>
             <h3 className="text-base font-semibold">Explore Vendor</h3>
             <span className="text-sm">example.com</span>
           </div>
         </Link>
       </div>
       
-      {/* Action buttons - positioned relative to actual video bounds */}
-      {videoBounds.width > 0 && isActive && (
+      {/* Action buttons - positioned inside video container */}
+      {isActive && (
         <div 
-          className="hidden md:flex fixed top-1/2 transform -translate-y-1/2 flex-col gap-4 z-40"
-          style={{ 
-            left: `${videoBounds.left + videoBounds.width + 10}px`
-          }}
+          className="hidden md:flex absolute top-1/2 transform -translate-y-1/2 right-[3%] flex-col gap-4 z-40"
         >
           <button 
             onClick={handleLike}
