@@ -1,17 +1,32 @@
 import { NextResponse } from 'next/server'
+import { getCategoryLibrary, type VendorCategory } from '@/config/categoryLibraries'
 
 export async function GET() {
   const BUNNY_ADMIN_KEY = process.env.bunny_cdn_admin_key?.trim() || 'e5bfd06a-fc66-4fa4-a04c-9898d59406c1af22c640-76ef-455b-889c-c6b0f190d89c'
   
-  const libraries = {
-    mobile_9x16: '467029',
-    desktop_16x9: '469922'
+  // Check all category libraries
+  const CATEGORIES: VendorCategory[] = ['default', 'photographers', 'venues', 'videographers', 'musicians', 'djs']
+  const DEVICE_TYPES = ['mobile', 'desktop'] as const
+  
+  const libraries: Record<string, { libraryId: string, apiKey: string }> = {}
+  
+  // Build library list from all categories
+  for (const category of CATEGORIES) {
+    for (const deviceType of DEVICE_TYPES) {
+      const config = getCategoryLibrary(category, deviceType)
+      const key = `${category}_${deviceType}`
+      libraries[key] = {
+        libraryId: config.libraryId,
+        apiKey: config.apiKey
+      }
+    }
   }
   
   const results: any = {}
   
   // Check each library with admin key
-  for (const [name, libraryId] of Object.entries(libraries)) {
+  for (const [name, lib] of Object.entries(libraries)) {
+    const { libraryId, apiKey } = lib
     try {
       console.log(`[ADMIN] Checking library ${libraryId} with admin key`)
       
@@ -29,12 +44,15 @@ export async function GET() {
       
       if (response.ok) {
         const data = JSON.parse(responseText)
+        const readyVideos = (data.items || []).filter((v: any) => v.status === 4)
         results[name] = {
           libraryId,
+          categoryApiKey: apiKey.substring(0, 10) + '...',
           status: 'success',
           totalVideos: data.totalItems || 0,
+          readyVideos: readyVideos.length,
           statusCode: response.status,
-          videos: (data.items || []).slice(0, 5).map((v: any) => ({
+          videos: (data.items || []).slice(0, 3).map((v: any) => ({
             title: v.title,
             guid: v.guid,
             status: v.status,
@@ -65,7 +83,8 @@ export async function GET() {
   
   // Also check library info endpoint
   const libraryInfo: any = {}
-  for (const [name, libraryId] of Object.entries(libraries)) {
+  for (const [name, lib] of Object.entries(libraries)) {
+    const { libraryId } = lib
     try {
       const infoResponse = await fetch(
         `https://video.bunnycdn.com/library/${libraryId}`,
@@ -97,9 +116,29 @@ export async function GET() {
     }
   }
   
+  // Group by category for better readability
+  const categorySummary: any = {}
+  for (const category of CATEGORIES) {
+    categorySummary[category] = {
+      mobile: results[`${category}_mobile`] || {},
+      desktop: results[`${category}_desktop`] || {}
+    }
+  }
+  
+  // Summary stats
+  const summary = {
+    totalLibraries: Object.keys(libraries).length,
+    librariesChecked: Object.keys(results).length,
+    librariesWithVideos: Object.values(results).filter((r: any) => r.status === 'success' && r.totalVideos > 0).length,
+    emptyLibraries: Object.values(results).filter((r: any) => r.status === 'success' && r.totalVideos === 0).length,
+    failedChecks: Object.values(results).filter((r: any) => r.status === 'error').length
+  }
+  
   return NextResponse.json({
     adminKey: BUNNY_ADMIN_KEY.substring(0, 20) + '...',
-    libraries: results,
+    summary,
+    categorySummary,
+    rawResults: results,
     libraryInfo
   })
 }

@@ -1,17 +1,6 @@
 import { NextResponse } from 'next/server'
 import { NextRequest } from 'next/server'
-
-// Get environment variables
-const BUNNY_LIBRARY_ID_MOBILE = process.env.bunny_cdn_video_streaming_library_9x16?.trim() || '467029'
-const BUNNY_LIBRARY_ID_DESKTOP = process.env.bunny_cdn_video_streaming_library_16x9?.trim() || '469922'
-
-// Each library has its own API key
-const BUNNY_API_KEY_MOBILE = process.env.bunny_cdn_video_streaming_key_9x16?.trim() || '931f28b3-fc95-4659-a29300277c12-1643-4c31'
-const BUNNY_API_KEY_DESKTOP = process.env.bunny_cdn_video_streaming_key_16x9?.trim() || '6b9d2bc6-6ad4-47d1-9fbc96134fc8-c5dc-4643'
-
-// Each library has its own hostname
-const BUNNY_HOSTNAME_MOBILE = process.env.bunny_cdn_video_streaming_hostname_9x16?.trim() || 'vz-97606b97-31d.b-cdn.net'
-const BUNNY_HOSTNAME_DESKTOP = process.env.bunny_cdn_video_streaming_hostname_16x9?.trim() || 'vz-b123ebaa-cf2.b-cdn.net'
+import { getCategoryLibrary, isValidCategory, type VendorCategory } from '@/config/categoryLibraries'
 
 // Wedding vendor categories and sample data
 const VENDOR_CATEGORIES = {
@@ -99,21 +88,24 @@ function transformVideos(videos: any[], hostname: string) {
 
 export async function GET(request: NextRequest) {
   try {
-    // Get device type from query params
+    // Get device type and category from query params
     const searchParams = request.nextUrl.searchParams
     const deviceType = searchParams.get('device') || 'mobile'
+    const categoryParam = searchParams.get('category') || 'default'
     
-    // Select appropriate library, API key, and hostname based on device type
-    const libraryId = deviceType === 'desktop' ? BUNNY_LIBRARY_ID_DESKTOP : BUNNY_LIBRARY_ID_MOBILE
-    const apiKey = deviceType === 'desktop' ? BUNNY_API_KEY_DESKTOP : BUNNY_API_KEY_MOBILE
-    const hostname = deviceType === 'desktop' ? BUNNY_HOSTNAME_DESKTOP : BUNNY_HOSTNAME_MOBILE
+    // Validate and get category
+    const category: VendorCategory = isValidCategory(categoryParam) ? categoryParam : 'default'
+    
+    // Get library configuration based on category and device type
+    const libraryConfig = getCategoryLibrary(category, deviceType as 'mobile' | 'desktop' | 'tablet')
+    const { libraryId, apiKey, hostname } = libraryConfig
     
     console.log('[API] Fetching videos from Bunny CDN...')
+    console.log('[API] Category:', category)
     console.log('[API] Device type:', deviceType)
     console.log('[API] Library ID being used:', libraryId)
     console.log('[API] API Key being used:', apiKey.substring(0, 10) + '...')
-    console.log('[API] Desktop Library (16x9):', BUNNY_LIBRARY_ID_DESKTOP)
-    console.log('[API] Mobile Library (9x16):', BUNNY_LIBRARY_ID_MOBILE)
+    console.log('[API] Hostname:', hostname)
     console.log('[API] Full URL:', `https://video.bunnycdn.com/library/${libraryId}/videos?page=1&itemsPerPage=100&orderBy=date`)
     
     // Fetch videos from Bunny CDN
@@ -130,14 +122,15 @@ export async function GET(request: NextRequest) {
     if (!response.ok) {
       console.error('[API] Bunny CDN error:', response.status, response.statusText)
       
-      // If desktop library fails, try mobile library as fallback
-      if (deviceType === 'desktop' && response.status === 401) {
-        console.log('[API] Desktop library authentication failed, falling back to mobile library')
+      // If category library fails, try default library as fallback
+      if (category !== 'default' && response.status === 401) {
+        console.log(`[API] ${category} library authentication failed, falling back to default library`)
+        const defaultConfig = getCategoryLibrary('default', deviceType as 'mobile' | 'desktop' | 'tablet')
         const fallbackResponse = await fetch(
-          `https://video.bunnycdn.com/library/${BUNNY_LIBRARY_ID_MOBILE}/videos?page=1&itemsPerPage=100&orderBy=date`,
+          `https://video.bunnycdn.com/library/${defaultConfig.libraryId}/videos?page=1&itemsPerPage=100&orderBy=date`,
           {
             headers: {
-              'AccessKey': BUNNY_API_KEY_MOBILE,
+              'AccessKey': defaultConfig.apiKey,
               'accept': 'application/json'
             }
           }
@@ -147,13 +140,14 @@ export async function GET(request: NextRequest) {
           const fallbackData = await fallbackResponse.json()
           return NextResponse.json({
             success: true,
-            videos: transformVideos(fallbackData.items || [], BUNNY_HOSTNAME_MOBILE),
+            videos: transformVideos(fallbackData.items || [], defaultConfig.hostname),
             total: fallbackData.totalItems || 0,
             source: 'bunny-cdn-live',
+            category,
             deviceType,
-            libraryId: BUNNY_LIBRARY_ID_MOBILE,
+            libraryId: defaultConfig.libraryId,
             fallback: true,
-            message: 'Desktop library unavailable, using mobile library'
+            message: `${category} library unavailable, using default library`
           })
         }
       }
@@ -182,6 +176,7 @@ export async function GET(request: NextRequest) {
       videos: transformedVideos,
       total: transformedVideos.length,
       source: 'bunny-cdn-live',
+      category,
       deviceType,
       libraryId
     })

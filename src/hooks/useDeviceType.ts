@@ -10,11 +10,14 @@ export interface UseDeviceTypeResult {
 // Helper function to determine device type
 function getDeviceType(): DeviceType {
   if (typeof window === 'undefined') {
-    return 'mobile' // Default for SSR
+    return 'desktop' // Default for SSR - assume desktop to avoid mobile library on desktop
   }
   
   const width = window.innerWidth
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  
+  // Log for debugging
+  console.log('[useDeviceType] Initial detection - width:', width, 'touch:', isTouchDevice)
   
   if (width < 768) {
     return 'mobile'
