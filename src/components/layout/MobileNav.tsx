@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Home, Search, ChevronUp, Heart, MapPin, Camera, Video, Music, Disc3 } from 'lucide-react'
+import { Home, Search, ChevronUp, Heart, MapPin, Camera, Video, Music, Disc3, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 const vendorCategories = [
+  { icon: TrendingUp, href: '/popular', label: 'Popular' },
   { icon: Heart, href: '/saved', label: 'Saved' },
   { icon: MapPin, href: '/venues', label: 'Venues' },
   { icon: Camera, href: '/photographers', label: 'Photographers' },

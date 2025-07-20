@@ -1,6 +1,6 @@
 'use client'
 
-import { MapPin, Camera, Video, Music, Disc3, Building2, UserPlus, Settings, Heart } from 'lucide-react'
+import { MapPin, Camera, Video, Music, Disc3, Building2, UserPlus, Settings, Heart, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -9,6 +9,7 @@ import { colors, colorClasses } from '@/config/colors'
 const topNavItems: never[] = []
 
 const navItems = [
+  { icon: TrendingUp, href: '/popular', label: 'Popular' },
   { icon: Heart, href: '/saved', label: 'Saved' },
   { icon: MapPin, href: '/venues', label: 'Venues' },
   { icon: Camera, href: '/photographers', label: 'Photographers' },
