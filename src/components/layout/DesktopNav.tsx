@@ -1,6 +1,6 @@
 'use client'
 
-import { MapPin, Camera, Video, Music, Disc3, Building2, UserPlus, Settings, Heart, TrendingUp, Flower2, Cake } from 'lucide-react'
+import { MapPin, Camera, Video, Music, Disc3, Building2, UserPlus, Settings, Heart, TrendingUp, Flower2, Cake, Users } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -14,6 +14,7 @@ const navItems = [
   { icon: Camera, href: '/photographers', label: 'Photographers' },
   { icon: Video, href: '/videographers', label: 'Videographers' },
   { icon: Music, href: '/musicians', label: 'Musicians' },
+  { icon: Users, href: '/bands', label: 'Bands' },
   { icon: Disc3, href: '/djs', label: "DJ's" },
   { icon: Flower2, href: '/florists', label: 'Florists' },
   { icon: Cake, href: '/wedding-cakes', label: 'Wedding Cakes' },

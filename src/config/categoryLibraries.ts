@@ -24,6 +24,7 @@ export type VendorCategory =
   | 'djs'
   | 'florists'
   | 'wedding-cakes'
+  | 'bands'
 
 // Map of categories to their Bunny CDN libraries
 // All sensitive data comes from environment variables
@@ -122,6 +123,18 @@ export const categoryLibraries: Record<VendorCategory, CategoryLibrary> = {
       libraryId: process.env.bunny_cdn_video_streaming_library_wedding_cakes_16x9?.trim() || '',
       hostname: process.env.bunny_cdn_video_streaming_hostname_wedding_cakes_16x9?.trim() || '',
       apiKey: process.env.bunny_cdn_video_streaming_key_wedding_cakes_16x9?.trim() || ''
+    }
+  },
+  bands: {
+    mobile: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_bands_9x16?.trim() || '',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_bands_9x16?.trim() || '',
+      apiKey: process.env.bunny_cdn_video_streaming_key_bands_9x16?.trim() || ''
+    },
+    desktop: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_bands_16x9?.trim() || '',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_bands_16x9?.trim() || '',
+      apiKey: process.env.bunny_cdn_video_streaming_key_bands_16x9?.trim() || ''
     }
   }
 }
