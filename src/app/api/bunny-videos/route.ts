@@ -67,13 +67,15 @@ function transformVideos(videos: any[], hostname: string, requestedCategory?: st
       const description = metaTags.description || 
         `${vendorName} - ${DESCRIPTIONS[index % DESCRIPTIONS.length]} | ${vendorCity}, ${vendorState}`
       
-      // Category logic: If we're fetching from a specific category library, trust that category
+      // Category logic: Only trust requested category for specific vendor categories
       let category = metaTags.category || 'general'
-      if (requestedCategory && requestedCategory !== 'default') {
-        // If we're fetching from a specific category library (e.g., videographers), use that category
+      const isVendorCategory = ['photographers', 'venues', 'videographers', 'musicians', 'djs', 'florists', 'wedding-cakes', 'bands'].includes(requestedCategory || '')
+      
+      if (isVendorCategory) {
+        // If we're fetching from a specific vendor category library, use that category
         category = requestedCategory
       } else if (!metaTags.category) {
-        // Only try to detect category if we're fetching from a general library
+        // For general libraries (default, popular, saved), detect category from content
         const searchText = `${vendorName} ${description}`.toLowerCase()
         for (const [cat, keywords] of Object.entries(VENDOR_CATEGORIES)) {
           if (keywords.some(keyword => searchText.includes(keyword))) {
