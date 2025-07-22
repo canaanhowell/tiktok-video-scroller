@@ -63,21 +63,22 @@ function transformVideos(videos: any[], hostname: string) {
       const vendorZipcode = metaTags.zipcode || '37201'
       const vendorWebsite = metaTags.vendorWebsite || metaTags.website || `www.${vendorName.toLowerCase().replace(/\s+/g, '')}.com`
       
-      // Category from metaTags or try to detect from title
+      // Description with vendor name and location
+      const description = metaTags.description || 
+        `${vendorName} - ${DESCRIPTIONS[index % DESCRIPTIONS.length]} | ${vendorCity}, ${vendorState}`
+      
+      // Category from metaTags or try to detect from vendor name/description
       let category = metaTags.category || 'general'
       if (!metaTags.category) {
-        const lowerTitle = (video.title || '').toLowerCase()
+        // Use vendor name and description for better categorization instead of raw filename
+        const searchText = `${vendorName} ${description}`.toLowerCase()
         for (const [cat, keywords] of Object.entries(VENDOR_CATEGORIES)) {
-          if (keywords.some(keyword => lowerTitle.includes(keyword))) {
+          if (keywords.some(keyword => searchText.includes(keyword))) {
             category = cat
             break
           }
         }
       }
-      
-      // Description with vendor name and location
-      const description = metaTags.description || 
-        `${vendorName} - ${DESCRIPTIONS[index % DESCRIPTIONS.length]} | ${vendorCity}, ${vendorState}`
       
       // Generate engagement numbers (could also store these in metaTags)
       const baseNumber = Math.floor(Math.random() * 10000) + 1000
