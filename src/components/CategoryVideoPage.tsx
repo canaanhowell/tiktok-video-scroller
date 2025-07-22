@@ -56,6 +56,8 @@ export function CategoryVideoPage({ category, title }: CategoryVideoPageProps) {
       
       if (data.success && data.videos && data.videos.length > 0) {
         console.log(`[${title}] Successfully loaded ${data.videos.length} videos from ${category} library (${deviceType})`)
+        console.log(`[${title}] First video category check:`, data.videos[0].category)
+        console.log(`[${title}] All video categories:`, data.videos.map(v => v.category))
         setVideos(data.videos)
       } else if (data.videos && data.videos.length === 0) {
         setError('No videos available in this category yet')

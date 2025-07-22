@@ -101,6 +101,10 @@ interface VideoItemProps {
 }
 
 function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, deviceType = 'mobile' }: VideoItemProps) {
+  // DEBUG: Log video data received with all fields
+  console.log(`[VideoItem] Video ${index + 1} FULL data:`, video)
+  console.log(`[VideoItem] Video ${index + 1} category specifically:`, JSON.stringify(video.category))
+  
   const videoRef = useRef<HTMLVideoElement>(null)
   const hlsRef = useRef<Hls | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
