@@ -80,7 +80,7 @@ function transformVideos(videos: any[], hostname: string, requestedCategory?: st
         const searchText = `${titleText} ${vendorName} ${description}`.toLowerCase()
         
         // Check categories in order of specificity (most specific first)
-        const categoryOrder = ['videographers', 'photographers', 'musicians', 'djs', 'venues', 'general']
+        const categoryOrder: (keyof typeof VENDOR_CATEGORIES)[] = ['videographers', 'photographers', 'musicians', 'djs', 'venues', 'general']
         for (const cat of categoryOrder) {
           const keywords = VENDOR_CATEGORIES[cat]
           if (keywords && keywords.some(keyword => searchText.includes(keyword))) {
