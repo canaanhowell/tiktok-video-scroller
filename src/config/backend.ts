@@ -13,6 +13,21 @@ export interface BackendClientConfig {
   headers?: Record<string, string>
 }
 
+export interface BackendServices {
+  database: {
+    baseUrl: string
+    apiKey?: string
+  }
+  search: {
+    baseUrl: string
+    apiKey?: string
+  }
+  auth: {
+    baseUrl: string
+    apiKey?: string
+  }
+}
+
 export interface BackendCapabilities {
   authentication: boolean
   videoStreaming: boolean
@@ -206,3 +221,19 @@ export class BackendConfig {
 
 // Singleton instance for use across the application
 export const backendConfig = new BackendConfig()
+
+// Export backend services configuration
+export const BACKEND_CONFIG: BackendServices = {
+  database: {
+    baseUrl: process.env.NEXT_PUBLIC_DATABASE_URL || 'http://localhost:3001',
+    apiKey: process.env.NEXT_PUBLIC_DATABASE_API_KEY
+  },
+  search: {
+    baseUrl: process.env.NEXT_PUBLIC_SEARCH_URL || 'http://localhost:3002', 
+    apiKey: process.env.NEXT_PUBLIC_SEARCH_API_KEY
+  },
+  auth: {
+    baseUrl: process.env.NEXT_PUBLIC_AUTH_URL || 'http://localhost:3004',
+    apiKey: process.env.NEXT_PUBLIC_AUTH_API_KEY
+  }
+}

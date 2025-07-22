@@ -15,6 +15,14 @@ interface Video {
   likes: number
   comments: number
   shares: number
+  category?: string
+  vendorName?: string
+  vendorWebsite?: string
+  vendorCity?: string
+  vendorState?: string
+  vendorZipcode?: string
+  title?: string
+  metaTags?: any // For debugging
 }
 
 interface VideoScrollerProps {
@@ -22,6 +30,14 @@ interface VideoScrollerProps {
   className?: string
   onVideoChange?: (index: number, video: Video) => void
   deviceType?: 'mobile' | 'desktop' | 'tablet'
+}
+
+// Helper function to extract vendor name from description
+function extractVendorName(description?: string): string | null {
+  if (!description) return null;
+  // The bunny API format is "VendorName - Description"
+  const parts = description.split(' - ');
+  return parts.length > 1 ? parts[0] : null;
 }
 
 export function VideoScrollerFresh({ videos, className, onVideoChange, deviceType = 'mobile' }: VideoScrollerProps) {
@@ -285,19 +301,34 @@ function VideoItemFresh({ video, index, isActive, globalUnmuted, onUnmute, devic
         />
         
         {/* Category overlay - fixed to top left of video */}
-        <div className="absolute top-[7%] md:top-[13%] left-[6%] z-40 pointer-events-none">
-          <span className="text-sm font-medium capitalize text-white bg-black/50 px-3 py-1.5 rounded-md">Photographers</span>
-        </div>
+        {video.category && (
+          <div className="absolute top-[7%] md:top-[13%] left-[6%] z-40 pointer-events-none">
+            <span className="text-sm font-medium capitalize text-white bg-black/50 px-3 py-1.5 rounded-md">
+              {video.category}
+            </span>
+          </div>
+        )}
         
         {/* Vendor button - fixed to bottom center of video */}
         <Link 
-          href="#" 
+          href={video.vendorWebsite ? (video.vendorWebsite.startsWith('http') ? video.vendorWebsite : `https://${video.vendorWebsite}`) : '#'}
+          target={video.vendorWebsite ? '_blank' : undefined}
+          rel={video.vendorWebsite ? 'noopener noreferrer' : undefined}
           className="absolute bottom-[23%] md:bottom-[5%] left-1/2 transform -translate-x-1/2 z-40"
           onClick={(e) => e.stopPropagation()}
         >
           <div className={`bg-[#f4c82d]/95 ${colorClasses.textPrimary} px-4 py-2 rounded-md hover:bg-[#f4c82d] transition flex flex-col items-center gap-1 w-[200px] md:w-auto`}>
-            <h3 className="text-base font-semibold">Explore Vendor</h3>
-            <span className="text-sm">example.com</span>
+            <h3 className="text-base font-semibold">
+              {video.vendorName || extractVendorName(video.description) || 'Explore Vendor'}
+            </h3>
+            {video.vendorCity && (
+              <span className="text-xs opacity-90">
+                {video.vendorCity}{video.vendorState ? `, ${video.vendorState}` : ''}
+              </span>
+            )}
+            <span className="text-sm">
+              {video.vendorWebsite || `${video.username}.com` || 'Visit Website'}
+            </span>
           </div>
         </Link>
         

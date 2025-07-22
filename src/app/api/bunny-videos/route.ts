@@ -53,35 +53,58 @@ function transformVideos(videos: any[], hostname: string) {
   return videos
     .filter((video: any) => video.status === 4) // Only ready videos
     .map((video: any, index: number) => {
-      // Generate vendor info
-      const vendorName = VENDOR_NAMES[index % VENDOR_NAMES.length]
-      const description = DESCRIPTIONS[index % DESCRIPTIONS.length]
+      // Check if video has metaTags from Bunny CDN
+      const metaTags = video.metaTags || {}
       
-      // Try to categorize based on video title
-      let category = 'general'
-      const lowerTitle = (video.title || '').toLowerCase()
+      // Use metaTags if available, otherwise fall back to generated data
+      const vendorName = metaTags.vendorName || metaTags.vendor || VENDOR_NAMES[index % VENDOR_NAMES.length]
+      const vendorCity = metaTags.vendorCity || metaTags.city || 'Nashville'
+      const vendorState = metaTags.state || 'Tennessee'
+      const vendorZipcode = metaTags.zipcode || '37201'
+      const vendorWebsite = metaTags.vendorWebsite || metaTags.website || `www.${vendorName.toLowerCase().replace(/\s+/g, '')}.com`
       
-      for (const [cat, keywords] of Object.entries(VENDOR_CATEGORIES)) {
-        if (keywords.some(keyword => lowerTitle.includes(keyword))) {
-          category = cat
-          break
+      // Category from metaTags or try to detect from title
+      let category = metaTags.category || 'general'
+      if (!metaTags.category) {
+        const lowerTitle = (video.title || '').toLowerCase()
+        for (const [cat, keywords] of Object.entries(VENDOR_CATEGORIES)) {
+          if (keywords.some(keyword => lowerTitle.includes(keyword))) {
+            category = cat
+            break
+          }
         }
       }
       
-      // Generate engagement numbers
+      // Description with vendor name and location
+      const description = metaTags.description || 
+        `${vendorName} - ${DESCRIPTIONS[index % DESCRIPTIONS.length]} | ${vendorCity}, ${vendorState}`
+      
+      // Generate engagement numbers (could also store these in metaTags)
       const baseNumber = Math.floor(Math.random() * 10000) + 1000
       
       return {
         id: video.guid,
         src: `https://${hostname}/${video.guid}/playlist.m3u8`,
         username: vendorName.toLowerCase().replace(/\s+/g, ''),
-        description: `${vendorName} - ${description}`,
-        likes: baseNumber + Math.floor(Math.random() * 5000),
-        comments: Math.floor(baseNumber / 20) + Math.floor(Math.random() * 100),
-        shares: Math.floor(baseNumber / 50) + Math.floor(Math.random() * 50),
+        description: description,
+        likes: metaTags.likes || baseNumber + Math.floor(Math.random() * 5000),
+        comments: metaTags.comments || Math.floor(baseNumber / 20) + Math.floor(Math.random() * 100),
+        shares: metaTags.shares || Math.floor(baseNumber / 50) + Math.floor(Math.random() * 50),
+        
+        // Vendor metadata
         category,
+        vendorName: vendorName,
+        vendorWebsite: vendorWebsite,
+        vendorCity: vendorCity,
+        vendorState: vendorState,
+        vendorZipcode: vendorZipcode,
+        
+        // Video metadata
         title: video.title || 'Wedding Video',
-        dateUploaded: video.dateUploaded
+        dateUploaded: video.dateUploaded,
+        
+        // Store original metaTags for debugging
+        metaTags: metaTags
       }
     })
 }

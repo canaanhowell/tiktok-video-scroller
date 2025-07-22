@@ -1,0 +1,253 @@
+{
+  "batchInfo": {
+    "lastScanned": "2025-07-22T10:30:00Z",
+    "totalVideos": 5,
+    "description": "Example batch configuration with sample video entries"
+  },
+  "categories": {
+    "photographers": {
+      "folderPath": "staging_app/input/photographers",
+      "defaultVendorMetadata": {
+        "category": "photographers",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90210",
+        "services": ["Wedding Photography", "Engagement Sessions", "Photo Albums"],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": [
+        {
+          "filename": "SunsetStudios_wedding_portfolio_2025.mp4",
+          "path": "photographers/SunsetStudios_wedding_portfolio_2025.mp4",
+          "fileSize": 52428800,
+          "lastModified": "2025-07-20T15:30:00Z",
+          "title": "Sunset Studios - Photography Showcase",
+          "description": "Professional wedding photography portfolio showcasing our best work",
+          "vendor": {
+            "name": "Sunset Studios Photography",
+            "category": "photographers",
+            "city": "Beverly Hills",
+            "state": "CA",
+            "zipcode": "90210",
+            "services": ["Wedding Photography", "Engagement Sessions", "Photo Albums", "Drone Photography"],
+            "priceRange": "$$$",
+            "verified": true,
+            "email": "info@sunsetstudios.com",
+            "phone": "(310) 555-0123",
+            "website": "https://sunsetstudios.com"
+          },
+          "videoMetadata": {
+            "tags": ["photographers", "wedding", "luxury", "beverly-hills", "portfolio"],
+            "duration": 180,
+            "resolution": "1080x1920",
+            "status": "active"
+          }
+        }
+      ]
+    },
+    "venues": {
+      "folderPath": "staging_app/input/venues",
+      "defaultVendorMetadata": {
+        "category": "venues",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": ["Wedding Venue", "Reception Hall", "Ceremony Space"],
+        "priceRange": "$$$-$$$$",
+        "verified": false
+      },
+      "videos": [
+        {
+          "filename": "MalibuOceanView_venue_tour_2025.mp4",
+          "path": "venues/MalibuOceanView_venue_tour_2025.mp4",
+          "fileSize": 104857600,
+          "lastModified": "2025-07-21T09:15:00Z",
+          "title": "Malibu Ocean View Estate - Venue Tour",
+          "description": "Stunning oceanfront wedding venue with panoramic Pacific views",
+          "vendor": {
+            "name": "Malibu Ocean View Estate",
+            "category": "venues",
+            "city": "Malibu",
+            "state": "CA",
+            "zipcode": "90265",
+            "services": ["Wedding Venue", "Reception Hall", "Ceremony Space", "Beachfront Access", "Bridal Suite"],
+            "priceRange": "$$$$",
+            "verified": true,
+            "email": "events@malibuoceanview.com",
+            "phone": "(424) 555-0199",
+            "website": "https://malibuoceanview.com"
+          },
+          "videoMetadata": {
+            "tags": ["venues", "wedding", "luxury", "malibu", "oceanfront", "beachfront"],
+            "duration": 240,
+            "resolution": "1080x1920",
+            "status": "active"
+          }
+        }
+      ]
+    },
+    "djs": {
+      "folderPath": "staging_app/input/djs",
+      "defaultVendorMetadata": {
+        "category": "djs",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": ["DJ Services", "MC Services", "Lighting", "Sound System"],
+        "priceRange": "$-$$",
+        "verified": false
+      },
+      "videos": [
+        {
+          "filename": "EliteBeats_wedding_mix_showcase.mp4",
+          "path": "djs/EliteBeats_wedding_mix_showcase.mp4",
+          "fileSize": 31457280,
+          "lastModified": "2025-07-19T20:00:00Z",
+          "title": "Elite Beats DJ - Wedding Mix Showcase",
+          "description": "High-energy wedding DJ services with custom light shows",
+          "vendor": {
+            "name": "Elite Beats Entertainment",
+            "category": "djs",
+            "city": "Hollywood",
+            "state": "CA",
+            "zipcode": "90028",
+            "services": ["DJ Services", "MC Services", "LED Dance Floor", "Uplighting", "Photo Booth"],
+            "priceRange": "$$",
+            "verified": true,
+            "email": "bookings@elitebeats.com",
+            "phone": "(323) 555-0177",
+            "website": "https://elitebeats-la.com"
+          },
+          "videoMetadata": {
+            "tags": ["djs", "wedding", "entertainment", "hollywood", "lighting"],
+            "duration": 120,
+            "resolution": "1080x1920",
+            "status": "active"
+          }
+        }
+      ]
+    },
+    "videographers": {
+      "folderPath": "staging_app/input/videographers",
+      "defaultVendorMetadata": {
+        "category": "videographers",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": ["Wedding Videography", "Drone Coverage", "Same-Day Edit"],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": [
+        {
+          "filename": "CinematicWeddings_highlight_reel_2025.mp4",
+          "path": "videographers/CinematicWeddings_highlight_reel_2025.mp4",
+          "fileSize": 78643200,
+          "lastModified": "2025-07-22T08:00:00Z",
+          "title": "Cinematic Weddings - Highlight Reel",
+          "description": "Award-winning wedding videography with cinematic storytelling",
+          "vendor": {
+            "name": "Cinematic Weddings LA",
+            "category": "videographers",
+            "city": "Pasadena",
+            "state": "CA",
+            "zipcode": "91101",
+            "services": ["4K Videography", "Drone Coverage", "Same-Day Edit", "Documentary Style", "Cinematic Films"],
+            "priceRange": "$$$",
+            "verified": true,
+            "email": "hello@cinematicweddingsla.com",
+            "phone": "(626) 555-0144",
+            "website": "https://cinematicweddingsla.com"
+          },
+          "videoMetadata": {
+            "tags": ["videographers", "wedding", "cinematic", "4k", "drone", "pasadena"],
+            "duration": 150,
+            "resolution": "1080x1920",
+            "status": "active"
+          }
+        }
+      ]
+    },
+    "florists": {
+      "folderPath": "staging_app/input/florists",
+      "defaultVendorMetadata": {
+        "category": "florists",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": ["Bridal Bouquets", "Centerpieces", "Ceremony Decor"],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": [
+        {
+          "filename": "BloomGarden_floral_designs_2025.mp4",
+          "path": "florists/BloomGarden_floral_designs_2025.mp4",
+          "fileSize": 41943040,
+          "lastModified": "2025-07-18T14:45:00Z",
+          "title": "Bloom Garden Florals - Design Portfolio",
+          "description": "Elegant floral designs for luxury weddings",
+          "vendor": {
+            "name": "Bloom Garden Florals",
+            "category": "florists",
+            "city": "Santa Monica",
+            "state": "CA",
+            "zipcode": "90401",
+            "services": ["Bridal Bouquets", "Centerpieces", "Ceremony Arches", "Floral Installations", "Boutonnieres"],
+            "priceRange": "$$$",
+            "verified": false,
+            "email": "design@bloomgardenflorals.com",
+            "phone": "(310) 555-0166",
+            "website": "https://bloomgardenflorals.com"
+          },
+          "videoMetadata": {
+            "tags": ["florists", "wedding", "luxury", "floral-design", "santa-monica"],
+            "duration": 90,
+            "resolution": "1080x1920",
+            "status": "pending"
+          }
+        }
+      ]
+    },
+    "musicians": {
+      "folderPath": "staging_app/input/musicians",
+      "defaultVendorMetadata": {
+        "category": "musicians",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": ["Live Music", "Ceremony Music", "Cocktail Hour"],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": []
+    },
+    "wedding-cakes": {
+      "folderPath": "staging_app/input/wedding-cakes",
+      "defaultVendorMetadata": {
+        "category": "wedding-cakes",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": ["Wedding Cakes", "Dessert Tables", "Custom Designs"],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": []
+    },
+    "bands": {
+      "folderPath": "staging_app/input/bands",
+      "defaultVendorMetadata": {
+        "category": "bands",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": ["Live Band", "Reception Entertainment", "Dance Music"],
+        "priceRange": "$$$-$$$$",
+        "verified": false
+      },
+      "videos": []
+    }
+  }
+}

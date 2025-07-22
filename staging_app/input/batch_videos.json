@@ -1,0 +1,168 @@
+{
+  "batchInfo": {
+    "lastScanned": "2025-07-22T00:09:43.964Z",
+    "totalVideos": 0,
+    "description": "Batch video upload configuration for wedding vendor categories"
+  },
+  "categories": {
+    "photographers": {
+      "folderPath": "staging_app/input/photographers",
+      "defaultVendorMetadata": {
+        "category": "photographers",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": [
+          "Wedding Photography",
+          "Engagement Sessions",
+          "Photo Albums"
+        ],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": []
+    },
+    "venues": {
+      "folderPath": "staging_app/input/venues",
+      "defaultVendorMetadata": {
+        "category": "venues",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": [
+          "Wedding Venue",
+          "Reception Hall",
+          "Ceremony Space"
+        ],
+        "priceRange": "$$$-$$$$",
+        "verified": false
+      },
+      "videos": []
+    },
+    "videographers": {
+      "folderPath": "staging_app/input/videographers",
+      "defaultVendorMetadata": {
+        "category": "videographers",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": [
+          "Wedding Videography",
+          "Drone Coverage",
+          "Same-Day Edit"
+        ],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": []
+    },
+    "musicians": {
+      "folderPath": "staging_app/input/musicians",
+      "defaultVendorMetadata": {
+        "category": "musicians",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": [
+          "Live Music",
+          "Ceremony Music",
+          "Cocktail Hour"
+        ],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": []
+    },
+    "djs": {
+      "folderPath": "staging_app/input/djs",
+      "defaultVendorMetadata": {
+        "category": "djs",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": [
+          "DJ Services",
+          "MC Services",
+          "Lighting",
+          "Sound System"
+        ],
+        "priceRange": "$-$$",
+        "verified": false
+      },
+      "videos": []
+    },
+    "florists": {
+      "folderPath": "staging_app/input/florists",
+      "defaultVendorMetadata": {
+        "category": "florists",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": [
+          "Bridal Bouquets",
+          "Centerpieces",
+          "Ceremony Decor"
+        ],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": []
+    },
+    "wedding-cakes": {
+      "folderPath": "staging_app/input/wedding-cakes",
+      "defaultVendorMetadata": {
+        "category": "wedding-cakes",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": [
+          "Wedding Cakes",
+          "Dessert Tables",
+          "Custom Designs"
+        ],
+        "priceRange": "$$-$$$",
+        "verified": false
+      },
+      "videos": []
+    },
+    "bands": {
+      "folderPath": "staging_app/input/bands",
+      "defaultVendorMetadata": {
+        "category": "bands",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipcode": "90001",
+        "services": [
+          "Live Band",
+          "Reception Entertainment",
+          "Dance Music"
+        ],
+        "priceRange": "$$$-$$$$",
+        "verified": false
+      },
+      "videos": []
+    }
+  },
+  "videoTemplate": {
+    "_comment": "Template for video entries when files are found in category folders",
+    "filename": "example_video.mp4",
+    "title": "Vendor Name - Service Showcase",
+    "description": "Professional wedding service video",
+    "vendor": {
+      "name": "Vendor Name",
+      "email": "vendor@example.com",
+      "phone": "(555) 123-4567",
+      "website": "https://vendor-website.com"
+    },
+    "videoMetadata": {
+      "tags": [
+        "wedding",
+        "professional",
+        "showcase"
+      ],
+      "duration": null,
+      "resolution": "1080x1920",
+      "status": "pending"
+    }
+  }
+}

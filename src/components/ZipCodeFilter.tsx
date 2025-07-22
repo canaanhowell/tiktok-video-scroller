@@ -56,7 +56,7 @@ export const ZipCodeFilter: React.FC<ZipCodeFilterProps> = ({ onCityChange, clas
   return (
     <div className={`zip-filter ${className || ''}`}>
       <div className="zip-input-group">
-        <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="zipcode" className="block text-sm font-medium text-gray-300 mb-2">
           Enter Your ZIP Code
         </label>
         <input
@@ -65,30 +65,30 @@ export const ZipCodeFilter: React.FC<ZipCodeFilterProps> = ({ onCityChange, clas
           value={zipCode}
           onChange={handleZipChange}
           placeholder="e.g., 37075"
-          className={`mt-1 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+          className={`w-full px-3 py-2 bg-gray-700 border rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
             !isValidTN && zipCode.length >= 5 
-              ? 'border-red-300' 
-              : 'border-gray-300'
+              ? 'border-red-500' 
+              : 'border-gray-600'
           }`}
           maxLength={5}
         />
         
         {zipCode.length >= 5 && !isValidTN && (
-          <p className="mt-2 text-sm text-red-600">
+          <p className="mt-2 text-sm text-red-400">
             We currently only serve Tennessee. Please enter a Tennessee ZIP code.
           </p>
         )}
         
         {detectedCity && (
-          <p className="mt-2 text-sm text-green-600">
+          <p className="mt-2 text-sm text-green-400">
             Showing vendors near <strong>{detectedCity}</strong>
           </p>
         )}
       </div>
 
       <div className="mt-4">
-        <p className="text-sm text-gray-500">Or select a city:</p>
-        <div className="mt-2 grid grid-cols-3 gap-2">
+        <p className="text-sm text-gray-400 mb-2">Or select a city:</p>
+        <div className="grid grid-cols-2 gap-2">
           {availableCities.map(city => (
             <button
               key={city}
@@ -104,10 +104,10 @@ export const ZipCodeFilter: React.FC<ZipCodeFilterProps> = ({ onCityChange, clas
                   setZipCode(centerZip);
                 }
               }}
-              className={`px-3 py-2 text-sm rounded-md transition-colors ${
+              className={`px-2 py-2 text-xs rounded-md transition-colors ${
                 detectedCity === city
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
               }`}
             >
               {city}
