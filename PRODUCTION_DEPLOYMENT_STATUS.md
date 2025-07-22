@@ -28,7 +28,7 @@
 1. ✅ Vendor search by category
 2. ✅ ZIP code filtering (Nashville area: 37215, 37203, 37205)
 3. ✅ Video streaming from Bunny CDN
-4. ✅ Real video metadata from /app/main/input/musicians/
+4. ✅ Real video metadata from /app/main/staging_app/input/musicians/
 5. ✅ Firebase client-side configuration
 6. ✅ Production environment variables
 7. ✅ **NEW** - Dynamic vendor metadata display (names, cities, websites)

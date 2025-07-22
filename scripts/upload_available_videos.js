@@ -55,7 +55,7 @@ function findVideoFiles() {
   console.log('🔍 Searching for video files...\n');
   
   const videos = [];
-  const inputDir = '/app/main/input';
+  const inputDir = '/app/main/staging_app/input';
   
   // Search in each category directory
   const categories = ['musicians', 'ceremonies', 'venues', 'photographers', 'videographers', 'djs'];

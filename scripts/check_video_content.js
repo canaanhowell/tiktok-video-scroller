@@ -31,12 +31,12 @@ console.log('3. Or at least use different sample videos for each category');
 // Show which files are available
 console.log('\n📁 Available video files:');
 const directories = [
-  '/app/main/input/musicians',
-  '/app/main/input/output/ceremonies',
-  '/app/main/input/venues',
-  '/app/main/input/photographers',
-  '/app/main/input/videographers',
-  '/app/main/input/djs'
+  '/app/main/staging_app/input/musicians',
+  '/app/main/staging_app/input/output/ceremonies',
+  '/app/main/staging_app/input/venues',
+  '/app/main/staging_app/input/photographers',
+  '/app/main/staging_app/input/videographers',
+  '/app/main/staging_app/input/djs'
 ];
 
 directories.forEach(dir => {

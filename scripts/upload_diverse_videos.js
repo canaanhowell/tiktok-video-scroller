@@ -107,8 +107,8 @@ async function createVideoWithMetadata(videoData) {
 async function uploadSampleFile(videoId) {
   // Use the first available MP4 file as sample content
   const sampleFiles = [
-    '/app/main/input/musicians/Gen-4 slowmotion playing the cello 190716958.mp4',
-    '/app/main/input/output/ceremonies/1.mp4'
+    '/app/main/staging_app/input/musicians/Gen-4 slowmotion playing the cello 190716958.mp4',
+    '/app/main/staging_app/input/output/ceremonies/1.mp4'
   ];
   
   let filePath = null;

@@ -27,7 +27,7 @@ try {
 // Find all 9x16 videos
 function find9x16Videos() {
   const videos = [];
-  const inputBase = '/app/main/input';
+  const inputBase = '/app/main/staging_app/input';
   
   // Search all subdirectories
   function searchDir(dir) {
