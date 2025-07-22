@@ -49,7 +49,7 @@ const DESCRIPTIONS = [
 ]
 
 // Helper function to transform videos
-function transformVideos(videos: any[], hostname: string) {
+function transformVideos(videos: any[], hostname: string, requestedCategory?: string) {
   return videos
     .filter((video: any) => video.status === 4) // Only ready videos
     .map((video: any, index: number) => {
@@ -67,10 +67,13 @@ function transformVideos(videos: any[], hostname: string) {
       const description = metaTags.description || 
         `${vendorName} - ${DESCRIPTIONS[index % DESCRIPTIONS.length]} | ${vendorCity}, ${vendorState}`
       
-      // Category from metaTags or try to detect from vendor name/description
+      // Category logic: If we're fetching from a specific category library, trust that category
       let category = metaTags.category || 'general'
-      if (!metaTags.category) {
-        // Use vendor name and description for better categorization instead of raw filename
+      if (requestedCategory && requestedCategory !== 'default') {
+        // If we're fetching from a specific category library (e.g., videographers), use that category
+        category = requestedCategory
+      } else if (!metaTags.category) {
+        // Only try to detect category if we're fetching from a general library
         const searchText = `${vendorName} ${description}`.toLowerCase()
         for (const [cat, keywords] of Object.entries(VENDOR_CATEGORIES)) {
           if (keywords.some(keyword => searchText.includes(keyword))) {
@@ -164,7 +167,7 @@ export async function GET(request: NextRequest) {
           const fallbackData = await fallbackResponse.json()
           return NextResponse.json({
             success: true,
-            videos: transformVideos(fallbackData.items || [], defaultConfig.hostname),
+            videos: transformVideos(fallbackData.items || [], defaultConfig.hostname, 'default'),
             total: fallbackData.totalItems || 0,
             source: 'bunny-cdn-live',
             category,
@@ -187,7 +190,7 @@ export async function GET(request: NextRequest) {
     console.log('[API] Processing', videos.length, 'videos')
     
     // Transform videos using helper function
-    const transformedVideos = transformVideos(videos, hostname)
+    const transformedVideos = transformVideos(videos, hostname, category)
     
     console.log('[API] Returning', transformedVideos.length, 'ready videos from library', libraryId)
     if (transformedVideos.length > 0) {
