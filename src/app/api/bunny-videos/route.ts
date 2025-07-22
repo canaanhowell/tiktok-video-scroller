@@ -4,11 +4,11 @@ import { getCategoryLibrary, isValidCategory, type VendorCategory } from '@/conf
 
 // Wedding vendor categories and sample data
 const VENDOR_CATEGORIES = {
-  venues: ['venue', 'hall', 'ballroom', 'garden', 'outdoor', 'indoor', 'space', 'location'],
-  photographers: ['photo', 'camera', 'portrait', 'shoot', 'picture', 'photography'],
-  videographers: ['video', 'film', 'cinema', 'record', 'footage', 'videography'],
-  musicians: ['music', 'band', 'song', 'perform', 'sing', 'musician', 'orchestra'],
-  djs: ['dj', 'mix', 'dance', 'party', 'remix', 'disco'],
+  venues: ['venue', 'venues', 'hall', 'ballroom', 'garden', 'outdoor', 'indoor', 'space', 'location'],
+  photographers: ['photo', 'photographer', 'photographers', 'photography', 'camera', 'portrait', 'shoot', 'picture'],
+  videographers: ['video', 'videographer', 'videographers', 'videography', 'film', 'cinema', 'record', 'footage'],
+  musicians: ['music', 'musician', 'musicians', 'band', 'song', 'perform', 'sing', 'orchestra'],
+  djs: ['dj', 'djs', 'mix', 'dance', 'party', 'remix', 'disco'],
   general: ['wedding', 'bride', 'groom', 'ceremony', 'reception', 'love', 'romance']
 }
 
