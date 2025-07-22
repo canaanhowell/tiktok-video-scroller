@@ -113,6 +113,13 @@ export default function Home() {
       
       if (data.success && data.videos && data.videos.length > 0) {
         console.log(`[Home] Successfully loaded ${data.videos.length} videos from Bunny CDN (${deviceType} library: ${data.libraryId})`)
+        
+        // DEBUG: Log category data
+        console.log('[Home] Video categories received:')
+        data.videos.forEach((video: any, i: number) => {
+          console.log(`  ${i+1}. "${video.title}" -> category: "${video.category}"`)
+        })
+        
         setVideos(data.videos)
         setIsLiveData(true)
       } else {

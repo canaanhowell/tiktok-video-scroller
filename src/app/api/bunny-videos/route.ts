@@ -53,28 +53,45 @@ function transformVideos(videos: any[], hostname: string, requestedCategory?: st
   return videos
     .filter((video: any) => video.status === 4) // Only ready videos
     .map((video: any, index: number) => {
-      // Check if video has metaTags from Bunny CDN
+      // First, try to parse metadata from moments field (new approach)
+      let parsedMetadata: any = {}
+      if (video.moments && Array.isArray(video.moments)) {
+        video.moments.forEach((moment: any) => {
+          if (moment.label && moment.label.includes(':')) {
+            const [key, ...valueParts] = moment.label.split(':')
+            const value = valueParts.join(':') // Handle values with colons
+            parsedMetadata[key] = value
+          }
+        })
+        
+        // Debug log if we found metadata in moments
+        if (Object.keys(parsedMetadata).length > 0) {
+          console.log(`[API] Found metadata in moments for video "${video.title}":`, parsedMetadata)
+        }
+      }
+      
+      // Check if video has metaTags from Bunny CDN (old approach)
       const metaTags = video.metaTags || {}
       
-      // Use metaTags if available, otherwise fall back to generated data
-      const vendorName = metaTags.vendorName || metaTags.vendor || VENDOR_NAMES[index % VENDOR_NAMES.length]
-      const vendorCity = metaTags.vendorCity || metaTags.city || 'Nashville'
-      const vendorState = metaTags.state || 'Tennessee'
-      const vendorZipcode = metaTags.zipcode || '37201'
-      const vendorWebsite = metaTags.vendorWebsite || metaTags.website || `www.${vendorName.toLowerCase().replace(/\s+/g, '')}.com`
+      // Use parsed moments data first, then metaTags, then fall back to generated data
+      const vendorName = parsedMetadata.vendorName || metaTags.vendorName || metaTags.vendor || VENDOR_NAMES[index % VENDOR_NAMES.length]
+      const vendorCity = parsedMetadata.vendorCity || metaTags.vendorCity || metaTags.city || 'Nashville'
+      const vendorState = parsedMetadata.vendorState || metaTags.state || 'Tennessee'
+      const vendorZipcode = parsedMetadata.vendorZipcode || metaTags.zipcode || '37201'
+      const vendorWebsite = parsedMetadata.vendorWebsite || metaTags.vendorWebsite || metaTags.website || `www.${vendorName.toLowerCase().replace(/\s+/g, '')}.com`
       
       // Description with vendor name and location
       const description = metaTags.description || 
         `${vendorName} - ${DESCRIPTIONS[index % DESCRIPTIONS.length]} | ${vendorCity}, ${vendorState}`
       
       // Category logic: Only trust requested category for specific vendor categories
-      let category = metaTags.category || 'general'
+      let category = parsedMetadata.category || metaTags.category || 'general'
       const isVendorCategory = ['photographers', 'venues', 'videographers', 'musicians', 'djs', 'florists', 'wedding-cakes', 'bands'].includes(requestedCategory || '')
       
       if (isVendorCategory) {
         // If we're fetching from a specific vendor category library, use that category
         category = requestedCategory
-      } else if (!metaTags.category) {
+      } else if (!parsedMetadata.category && !metaTags.category) {
         // For general libraries (default, popular, saved), detect category from vendor name first (more reliable)
         const vendorText = `${vendorName} ${description}`.toLowerCase()
         const titleText = (video.title || '').toLowerCase()
