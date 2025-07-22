@@ -44,6 +44,9 @@ export function VideoScrollerFresh({ videos, className, onVideoChange, deviceTyp
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [globalUnmuted, setGlobalUnmuted] = useState(false) // Track if user has ever unmuted
+  
+  // DEBUG: Log videos received
+  console.log('[VideoScroller] Received videos:', videos.map((v, i) => `${i+1}. @${v.username} → ${v.category}`))
 
   // Dead simple scroll detection
   useEffect(() => {
