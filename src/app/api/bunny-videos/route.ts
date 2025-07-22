@@ -75,17 +75,29 @@ function transformVideos(videos: any[], hostname: string, requestedCategory?: st
         // If we're fetching from a specific vendor category library, use that category
         category = requestedCategory
       } else if (!metaTags.category) {
-        // For general libraries (default, popular, saved), detect category from Bunny CDN title first, then vendor name
+        // For general libraries (default, popular, saved), detect category from vendor name first (more reliable)
+        const vendorText = `${vendorName} ${description}`.toLowerCase()
         const titleText = (video.title || '').toLowerCase()
-        const searchText = `${titleText} ${vendorName} ${description}`.toLowerCase()
         
-        // Check categories in order of specificity (most specific first)
+        // First try vendor name + description (more reliable)
         const categoryOrder: (keyof typeof VENDOR_CATEGORIES)[] = ['videographers', 'photographers', 'musicians', 'djs', 'venues', 'general']
         for (const cat of categoryOrder) {
           const keywords = VENDOR_CATEGORIES[cat]
-          if (keywords && keywords.some(keyword => searchText.includes(keyword))) {
+          if (keywords && keywords.some(keyword => vendorText.includes(keyword))) {
             category = cat
             break
+          }
+        }
+        
+        // If no match found in vendor name, try title as fallback
+        if (category === 'general') {
+          const searchText = `${titleText} ${vendorText}`.toLowerCase()
+          for (const cat of categoryOrder) {
+            const keywords = VENDOR_CATEGORIES[cat]
+            if (keywords && keywords.some(keyword => searchText.includes(keyword))) {
+              category = cat
+              break
+            }
           }
         }
       }
