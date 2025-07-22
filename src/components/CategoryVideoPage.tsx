@@ -155,10 +155,11 @@ export function CategoryVideoPage({ category, title }: CategoryVideoPageProps) {
           onVideoChange={handleVideoChange}
           deviceType={deviceType}
         />
-        {/* DEBUG: Hidden div to verify data */}
-        <div style={{ display: 'none' }}>
-          {console.log(`[${title}] Passing to VideoScroller:`, videos.map((v, i) => `${i+1}. @${v.username} → ${v.category}`))}
-        </div>
+        {/* DEBUG: Log data being passed */}
+        {(() => {
+          console.log(`[${title}] Passing to VideoScroller:`, videos.map((v, i) => `${i+1}. @${v.username} → ${v.category}`))
+          return null
+        })()}
       </div>
     </div>
   )
