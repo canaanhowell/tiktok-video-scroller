@@ -17,6 +17,8 @@ export interface CategoryLibrary {
 
 export type VendorCategory = 
   | 'default'
+  | 'popular'
+  | 'saved'
   | 'photographers' 
   | 'venues'
   | 'videographers'
@@ -30,6 +32,30 @@ export type VendorCategory =
 // All sensitive data comes from environment variables
 export const categoryLibraries: Record<VendorCategory, CategoryLibrary> = {
   default: {
+    mobile: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_9x16?.trim() || '467029',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_9x16?.trim() || 'vz-97606b97-31d.b-cdn.net',
+      apiKey: process.env.bunny_cdn_video_streaming_key_9x16?.trim() || '931f28b3-fc95-4659-a29300277c12-1643-4c31'
+    },
+    desktop: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_16x9?.trim() || '469922',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_16x9?.trim() || 'vz-b123ebaa-cf2.b-cdn.net',
+      apiKey: process.env.bunny_cdn_video_streaming_key_16x9?.trim() || '6b9d2bc6-6ad4-47d1-9fbc96134fc8-c5dc-4643'
+    }
+  },
+  popular: {
+    mobile: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_9x16?.trim() || '467029',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_9x16?.trim() || 'vz-97606b97-31d.b-cdn.net',
+      apiKey: process.env.bunny_cdn_video_streaming_key_9x16?.trim() || '931f28b3-fc95-4659-a29300277c12-1643-4c31'
+    },
+    desktop: {
+      libraryId: process.env.bunny_cdn_video_streaming_library_16x9?.trim() || '469922',
+      hostname: process.env.bunny_cdn_video_streaming_hostname_16x9?.trim() || 'vz-b123ebaa-cf2.b-cdn.net',
+      apiKey: process.env.bunny_cdn_video_streaming_key_16x9?.trim() || '6b9d2bc6-6ad4-47d1-9fbc96134fc8-c5dc-4643'
+    }
+  },
+  saved: {
     mobile: {
       libraryId: process.env.bunny_cdn_video_streaming_library_9x16?.trim() || '467029',
       hostname: process.env.bunny_cdn_video_streaming_hostname_9x16?.trim() || 'vz-97606b97-31d.b-cdn.net',
